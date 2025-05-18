@@ -1,7 +1,6 @@
 /**
  * 기사 목록을 렌더링하는 컴포넌트입니다.
  */
-import React from 'react';
 import type { Article } from '@/entities/article/api/types';
 import { ArticleItem } from './ArticleItem';
 
