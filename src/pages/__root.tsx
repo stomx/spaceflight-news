@@ -9,7 +9,9 @@ export const Route = createRootRoute({
         </Link>
       </div>
       <hr />
-      <Outlet />
+      <div className="flex flex-col justify-center gap-2 p-4">
+        <Outlet />
+      </div>
     </>
   ),
 });

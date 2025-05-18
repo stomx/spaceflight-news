@@ -4,6 +4,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryProvider } from './providers/query-provider';
+import '@/shared/styles/index.css';
 
 const router = createRouter({ routeTree });
 
