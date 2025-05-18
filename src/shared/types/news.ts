@@ -38,4 +38,4 @@ export interface PaginatedResponse<T> {
 }
 
 export type PaginatedArticleList = PaginatedResponse<Article>;
-export type PaginatedBlogList = PaginatedResponse<Blog>; 
+export type PaginatedBlogList = PaginatedResponse<Blog>;

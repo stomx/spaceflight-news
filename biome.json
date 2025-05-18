@@ -1,24 +1,8 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "files": {
-    "ignore": [
-      "dist",
-      "node_modules",
-      "coverage",
-      "build",
-      "out",
-      "public",
-      "tsconfig.*.json",
-      "routeTree.gen.ts"
-    ],
-    "include": [
-      "**/*.ts",
-      "**/*.tsx",
-      "**/*.js",
-      "**/*.jsx",
-      "**/*.json",
-      "**/*.md"
-    ]
+    "ignore": ["dist", "node_modules", "coverage", "build", "out", "public", "tsconfig.*.json", "routeTree.gen.ts"],
+    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json", "**/*.md"]
   },
   "formatter": {
     "enabled": true,
@@ -55,9 +39,7 @@
         "noForEach": "warn"
       }
     },
-    "ignore": [
-      "dist"
-    ]
+    "ignore": ["dist"]
   },
   "javascript": {
     "formatter": {

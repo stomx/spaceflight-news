@@ -38,7 +38,13 @@ export function Gnb() {
     <nav className="flex justify-between items-center gap-4 bg-background shadow-sm py-2 pr-6 pl-2 border-b">
       <div className="flex items-center gap-2">
         {isDetailPage && (
-          <Button size="icon" variant="ghost" onClick={handleBack} aria-label="목록으로" className="p-0 w-8 h-8 cursor-pointer">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleBack}
+            aria-label="목록으로"
+            className="p-0 w-8 h-8 cursor-pointer"
+          >
             <ArrowLeftIcon />
           </Button>
         )}
