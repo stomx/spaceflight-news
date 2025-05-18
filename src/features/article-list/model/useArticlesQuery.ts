@@ -1,16 +1,6 @@
-import type { PaginatedArticleList } from '@/entities/article/api/types';
+import type { Article } from '@/shared/types/news';
+import { usePaginatedListQuery } from '@/shared/hooks/usePaginatedListQuery';
 
-import { getArticles } from '@/entities/article/api/getArticles';
-import { useQuery } from '@tanstack/react-query';
-
-export interface ArticleListQueryParams {
-  limit: number;
-  offset: number;
-}
-
-export function useArticlesQuery(params: ArticleListQueryParams) {
-  return useQuery<PaginatedArticleList, Error>({
-    queryKey: ['articles', params],
-    queryFn: () => getArticles(params),
-  });
+export function useArticlesQuery(params: { limit: number; offset: number }) {
+  return usePaginatedListQuery<Article>('articles', params);
 }

@@ -1,16 +1,6 @@
-import type { PaginatedBlogList } from '@/entities/blog/api/types';
+import type { Blog } from '@/shared/types/news';
+import { usePaginatedListQuery } from '@/shared/hooks/usePaginatedListQuery';
 
-import { getBlogs } from '@/entities/blog/api/getBlogs';
-import { useQuery } from '@tanstack/react-query';
-
-export interface BlogListQueryParams {
-  limit: number;
-  offset: number;
-}
-
-export function useBlogsQuery(params: BlogListQueryParams) {
-  return useQuery<PaginatedBlogList, Error>({
-    queryKey: ['blogs', params],
-    queryFn: () => getBlogs(params),
-  });
+export function useBlogsQuery(params: { limit: number; offset: number }) {
+  return usePaginatedListQuery<Blog>('blogs', params);
 }

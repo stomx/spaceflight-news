@@ -1,4 +1,4 @@
-import type { Article } from '@/entities/article/api/types';
+import type { Article } from '@/shared/types/news';
 
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { ArticleItem } from './ArticleItem';

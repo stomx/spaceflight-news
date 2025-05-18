@@ -1,4 +1,4 @@
-import type { Blog } from '@/entities/blog/api/types';
+import type { Blog } from '@/shared/types/news';
 
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { BlogItem } from './BlogItem';

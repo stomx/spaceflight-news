@@ -1,4 +1,4 @@
-import type { Blog } from '@/entities/blog/api/types';
+import type { Blog } from '@/shared/types/news';
 
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';

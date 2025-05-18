@@ -3,7 +3,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useArticlesQuery } from './model/useArticlesQuery';
 import { ArticleList, ArticleListSkeleton } from './ui/ArticleList';
 
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 3;
 
 export function ArticleListFeature() {
   const search = useSearch({ strict: false });
@@ -28,10 +28,15 @@ export function ArticleListFeature() {
   if (!data) return <div className="py-8 text-muted-foreground text-center">데이터가 없습니다.</div>;
 
   return (
-    <div>
+    <div className="flex flex-col gap-4 mx-auto w-full max-w-3xl">
       <ArticleList articles={data.results} />
       <div className="flex justify-center items-center gap-2 mt-6">
-        <Button onClick={() => handlePageChange(page - 1)} disabled={page === 1} variant="outline">
+        <Button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}
+          variant="outline"
+          className="cursor-pointer"
+        >
           이전
         </Button>
         <span className="text-muted-foreground text-sm">
@@ -41,6 +46,7 @@ export function ArticleListFeature() {
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages || totalPages === 0}
           variant="outline"
+          className="cursor-pointer"
         >
           다음
         </Button>
