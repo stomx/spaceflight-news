@@ -6,7 +6,6 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  base: '/portfolio-spaceflight-news/',
   plugins: [
     TanStackRouterVite({
       target: 'react',
