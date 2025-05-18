@@ -1,9 +1,7 @@
-/**
- * Spaceflight News API 기사 목록을 limit/offset 기반으로 조회하는 커스텀 훅입니다.
- */
-import { useQuery } from '@tanstack/react-query';
-import { getArticles } from '@/entities/article/api/getArticles';
 import type { PaginatedArticleList } from '@/entities/article/api/types';
+
+import { getArticles } from '@/entities/article/api/getArticles';
+import { useQuery } from '@tanstack/react-query';
 
 export interface ArticleListQueryParams {
   limit: number;

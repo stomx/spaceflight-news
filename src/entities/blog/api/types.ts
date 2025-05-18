@@ -22,7 +22,7 @@ export interface Event {
   provider: string;
 }
 
-export interface Article {
+export interface Blog {
   id: number;
   title: string;
   authors: Author[];
@@ -37,9 +37,9 @@ export interface Article {
   events: Event[];
 }
 
-export interface PaginatedArticleList {
+export interface PaginatedBlogList {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Article[];
+  results: Blog[];
 }

@@ -12,7 +12,9 @@
 
 import { Route as rootRoute } from './pages/__root'
 import { Route as IndexImport } from './pages/index'
+import { Route as BlogsIndexImport } from './pages/blogs/index'
 import { Route as ArticlesIndexImport } from './pages/articles/index'
+import { Route as BlogsBlogIdImport } from './pages/blogs/$blogId'
 import { Route as ArticlesArticleIdImport } from './pages/articles/$articleId'
 
 // Create/Update Routes
@@ -23,9 +25,21 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const BlogsIndexRoute = BlogsIndexImport.update({
+  id: '/blogs/',
+  path: '/blogs/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ArticlesIndexRoute = ArticlesIndexImport.update({
   id: '/articles/',
   path: '/articles/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BlogsBlogIdRoute = BlogsBlogIdImport.update({
+  id: '/blogs/$blogId',
+  path: '/blogs/$blogId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,11 +67,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArticlesArticleIdImport
       parentRoute: typeof rootRoute
     }
+    '/blogs/$blogId': {
+      id: '/blogs/$blogId'
+      path: '/blogs/$blogId'
+      fullPath: '/blogs/$blogId'
+      preLoaderRoute: typeof BlogsBlogIdImport
+      parentRoute: typeof rootRoute
+    }
     '/articles/': {
       id: '/articles/'
       path: '/articles'
       fullPath: '/articles'
       preLoaderRoute: typeof ArticlesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/blogs/': {
+      id: '/blogs/'
+      path: '/blogs'
+      fullPath: '/blogs'
+      preLoaderRoute: typeof BlogsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -68,41 +96,62 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/articles/$articleId': typeof ArticlesArticleIdRoute
+  '/blogs/$blogId': typeof BlogsBlogIdRoute
   '/articles': typeof ArticlesIndexRoute
+  '/blogs': typeof BlogsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/articles/$articleId': typeof ArticlesArticleIdRoute
+  '/blogs/$blogId': typeof BlogsBlogIdRoute
   '/articles': typeof ArticlesIndexRoute
+  '/blogs': typeof BlogsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/articles/$articleId': typeof ArticlesArticleIdRoute
+  '/blogs/$blogId': typeof BlogsBlogIdRoute
   '/articles/': typeof ArticlesIndexRoute
+  '/blogs/': typeof BlogsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/articles/$articleId' | '/articles'
+  fullPaths:
+    | '/'
+    | '/articles/$articleId'
+    | '/blogs/$blogId'
+    | '/articles'
+    | '/blogs'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/articles/$articleId' | '/articles'
-  id: '__root__' | '/' | '/articles/$articleId' | '/articles/'
+  to: '/' | '/articles/$articleId' | '/blogs/$blogId' | '/articles' | '/blogs'
+  id:
+    | '__root__'
+    | '/'
+    | '/articles/$articleId'
+    | '/blogs/$blogId'
+    | '/articles/'
+    | '/blogs/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ArticlesArticleIdRoute: typeof ArticlesArticleIdRoute
+  BlogsBlogIdRoute: typeof BlogsBlogIdRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
+  BlogsIndexRoute: typeof BlogsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ArticlesArticleIdRoute: ArticlesArticleIdRoute,
+  BlogsBlogIdRoute: BlogsBlogIdRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
+  BlogsIndexRoute: BlogsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +166,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/articles/$articleId",
-        "/articles/"
+        "/blogs/$blogId",
+        "/articles/",
+        "/blogs/"
       ]
     },
     "/": {
@@ -126,8 +177,14 @@ export const routeTree = rootRoute
     "/articles/$articleId": {
       "filePath": "articles/$articleId.tsx"
     },
+    "/blogs/$blogId": {
+      "filePath": "blogs/$blogId.tsx"
+    },
     "/articles/": {
       "filePath": "articles/index.tsx"
+    },
+    "/blogs/": {
+      "filePath": "blogs/index.tsx"
     }
   }
 }
