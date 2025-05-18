@@ -31,7 +31,6 @@ export function ArticleListFeature() {
 
   return (
     <div>
-      <h1 className="mb-6 font-bold text-2xl">최신 우주 뉴스</h1>
       <ArticleList articles={data.results} />
       <div className="flex justify-center items-center gap-2 mt-6">
         <Button onClick={() => handlePageChange(page - 1)} disabled={page === 1} variant="outline">
