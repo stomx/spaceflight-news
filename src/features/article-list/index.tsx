@@ -1,56 +1,41 @@
-import { Button } from '@/shared/components/ui/button';
-import { useNavigate, useSearch } from '@tanstack/react-router';
-import { useArticlesQuery } from './model/useArticlesQuery';
-import { ArticleList, ArticleListSkeleton } from './ui/ArticleList';
-
-const DEFAULT_LIMIT = 3;
+import { NewsCard } from '@/shared/components/NewsCard';
+import { NewsList } from '@/shared/components/NewsList';
+import { useNewsListModel } from '@/shared/hooks/useNewsListModel';
+import type { Article } from '@/shared/types/news';
+import { useNavigate } from '@tanstack/react-router';
 
 export function ArticleListFeature() {
-  const search = useSearch({ strict: false });
+  const { data, isLoading, isError, error, page, limit, totalPages, search } = useNewsListModel<Article>('articles');
   const navigate = useNavigate();
-  const page = Number(search.page) || 1;
-  const limit = Number(search.limit) || DEFAULT_LIMIT;
-  const offset = (page - 1) * limit;
-
-  const { data, isLoading, isError, error } = useArticlesQuery({ limit, offset });
-
-  const totalCount = data?.count ?? 0;
-  const totalPages = Math.ceil(totalCount / limit);
 
   const handlePageChange = (newPage: number) => {
-    navigate({
-      search: { ...search, page: newPage, limit },
-    });
+    navigate({ search: { ...search, page: newPage, limit } });
   };
 
-  if (isLoading) return <ArticleListSkeleton />;
-  if (isError) return <div className="py-8 text-destructive text-center">에러 발생: {error?.message}</div>;
-  if (!data) return <div className="py-8 text-muted-foreground text-center">데이터가 없습니다.</div>;
+  if (isLoading) return <div>로딩 중...</div>;
+  if (isError) return <div>에러 발생: {error?.message}</div>;
+  if (!data) return <div>데이터가 없습니다.</div>;
 
   return (
-    <div className="flex flex-col gap-4 mx-auto w-full max-w-3xl">
-      <ArticleList articles={data.results} />
-      <div className="flex justify-center items-center gap-2 mt-6">
-        <Button
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 1}
-          variant="outline"
-          className="cursor-pointer"
+    <NewsList
+      items={data.results}
+      renderItem={(article) => (
+        <NewsCard
+          key={article.id}
+          imageUrl={article.image_url}
+          title={article.title}
+          summary={article.summary}
+          date={new Date(article.published_at).toLocaleDateString()}
+          site={article.news_site}
+          featured={article.featured}
         >
-          이전
-        </Button>
-        <span className="text-muted-foreground text-sm">
-          {page} / {totalPages || 1}
-        </span>
-        <Button
-          onClick={() => handlePageChange(page + 1)}
-          disabled={page === totalPages || totalPages === 0}
-          variant="outline"
-          className="cursor-pointer"
-        >
-          다음
-        </Button>
-      </div>
-    </div>
+          {/* 버튼 등 children */}
+        </NewsCard>
+      )}
+      emptyText="표시할 기사가 없습니다."
+      page={page}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    />
   );
 }
