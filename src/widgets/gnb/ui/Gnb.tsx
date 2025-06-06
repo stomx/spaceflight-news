@@ -1,4 +1,4 @@
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/shared/components/button';
 import { Link, useMatchRoute, useNavigate, useSearch } from '@tanstack/react-router';
 import { useMemo } from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
