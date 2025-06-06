@@ -1714,10 +1714,10 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
-lucide-react@^0.511.0:
-  version "0.511.0"
-  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.511.0.tgz#1dfef3065c725ac83f5fe0a6f02d1e0b0c36e641"
-  integrity sha512-VK5a2ydJ7xm8GvBeKLS9mu1pVK6ucef9780JVUjw6bAjJL/QXnd4Y0p7SPeOUMC27YhzNCZvm5d/QX0Tp3rc0w==
+lucide-react@^0.513.0:
+  version "0.513.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.513.0.tgz#1315c04fb1121f3be7883ff08a95d55a31a14e97"
+  integrity sha512-CJZKq2g8Y8yN4Aq002GahSXbG2JpFv9kXwyiOAMvUBv7pxeOFHUWKB0mO7MiY4ZVFCV4aNjv2BJFq/z3DgKPQg==
 
 magic-string@^0.30.17:
   version "0.30.17"
@@ -2080,10 +2080,10 @@ tsx@^4.19.2:
   optionalDependencies:
     fsevents "~2.3.3"
 
-tw-animate-css@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/tw-animate-css/-/tw-animate-css-1.3.0.tgz#b9f3927467f148503c368c455f82d0d1ed7518a3"
-  integrity sha512-jrJ0XenzS9KVuDThJDvnhalbl4IYiMQ/XvpA0a2FL8KmlK+6CSMviO7ROY/I7z1NnUs5NnDhlM6fXmF40xPxzw==
+tw-animate-css@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/tw-animate-css/-/tw-animate-css-1.3.4.tgz#635c5e8f9378ff6a98283850400e70859e0c2672"
+  integrity sha512-dd1Ht6/YQHcNbq0znIT6dG8uhO7Ce+VIIhZUhjsryXsMPJQz3bZg7Q2eNzLwipb25bRZslGb2myio5mScd1TFg==
 
 typescript@~5.8.3:
   version "5.8.3"
