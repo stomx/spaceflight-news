@@ -45,3 +45,7 @@ Thumbs.db
 
 # vite 캐시 폴더
 .vite/
+
+# 메모리 뱅크 및 MCP 관련 파일
+memory-bank/
+.vscode/mcp.json
