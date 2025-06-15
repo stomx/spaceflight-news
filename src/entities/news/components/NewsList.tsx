@@ -1,4 +1,5 @@
 import { Button } from '@/shared/components/button';
+import { memo } from 'react';
 
 interface NewsListProps<T> {
   items: T[];
@@ -9,7 +10,7 @@ interface NewsListProps<T> {
   onPageChange?: (page: number) => void;
 }
 
-export function NewsList<T>({
+function NewsListComponent<T>({
   items,
   renderItem,
   emptyText = '표시할 항목이 없습니다.',
@@ -20,9 +21,12 @@ export function NewsList<T>({
   if (!items.length) {
     return <div className="py-8 text-muted-foreground text-center">{emptyText}</div>;
   }
+  
   return (
     <div>
-      <section className="flex flex-col gap-4 mx-auto w-full max-w-3xl">{items.map(renderItem)}</section>
+      <section className="flex flex-col gap-4 mx-auto w-full max-w-3xl">
+        {items.map(renderItem)}
+      </section>
       {page && totalPages && onPageChange && (
         <div className="flex justify-center items-center gap-2 mt-6">
           <Button onClick={() => onPageChange(page - 1)} disabled={page === 1} variant="outline">
@@ -43,3 +47,6 @@ export function NewsList<T>({
     </div>
   );
 }
+
+// 제네릭 컴포넌트의 메모화를 위한 타입 캐스팅
+export const NewsList = memo(NewsListComponent) as typeof NewsListComponent;
