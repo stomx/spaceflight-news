@@ -1,6 +1,5 @@
 import { usePaginatedListQuery } from '@/shared/hooks/usePaginatedListQuery';
 import { useSearch } from '@tanstack/react-router';
-import { NewsList } from '@/entities/news/components/NewsList';
 
 /**
  * 뉴스/블로그 등 모든 도메인에서 사용 가능한 제네릭 리스트 모델 훅
