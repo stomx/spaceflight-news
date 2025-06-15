@@ -50,7 +50,7 @@
 - **체계적인 문서화 및 협업 능력**
 
 ### 향후 확장 계획
-- 🔄 백엔드 API 개발 (Node.js + Express/Fastify)
+- 🔄 백엔드 API 개발 (Node.js 22.16.0 + Express/Fastify)
 - 🔄 데이터베이스 설계 및 연동 (PostgreSQL/MongoDB)
 - 🔄 테스트 코드 작성 (Jest, Testing Library, E2E)
 - 🔄 모니터링 및 로깅 시스템 구축
