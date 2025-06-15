@@ -1,5 +1,5 @@
-import { NewsCard } from '@/shared/components/NewsCard';
-import { NewsList } from '@/shared/components/NewsList';
+import { NewsCard } from '@/entities/news/components/NewsCard';
+import { NewsList } from '@/entities/news/components/NewsList';
 import { useNewsListModel } from '@/shared/hooks/useNewsListModel';
 import type { Blog } from '@/shared/types/news';
 import { useNavigate } from '@tanstack/react-router';
