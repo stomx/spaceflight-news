@@ -11,7 +11,11 @@
     "format": "biome format . --write",
     "check": "biome check .",
     "fix": "biome check . --apply",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -37,6 +41,9 @@
     "@tailwindcss/vite": "^4.1.6",
     "@tanstack/router-devtools": "^1.120.6",
     "@tanstack/router-plugin": "^1.120.5",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.5.2",
     "@types/node": "^22.15.18",
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
@@ -47,6 +54,10 @@
     "tw-animate-css": "^1.3.4",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^2.2.4",
+    "@vitest/ui": "^2.2.4",
+    "@vitest/coverage-v8": "^2.2.4",
+    "jsdom": "^26.0.0"
   }
 }
