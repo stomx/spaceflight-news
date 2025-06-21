@@ -5,9 +5,9 @@ import { vi } from 'vitest';
 // Mock IntersectionObserver for tests
 // biome-ignore lint/suspicious/noExplicitAny: 테스트 글로벌 객체 설정에 any 필요
 (globalThis as any).IntersectionObserver = class IntersectionObserver {
-  disconnect() {}
-  observe() {}
-  unobserve() {}
+  disconnect() { }
+  observe() { }
+  unobserve() { }
 };
 
 // Mock matchMedia for tests
