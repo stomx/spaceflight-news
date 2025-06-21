@@ -36,7 +36,7 @@ export function Gnb() {
   };
 
   return (
-    <motion.nav 
+    <motion.nav
       className="flex justify-between items-center gap-4 bg-background shadow-sm py-2 pr-6 pl-2 border-b"
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}

@@ -28,13 +28,13 @@ export function ArticleListFeature() {
 
   if (isError) {
     return (
-      <motion.div 
+      <motion.div
         className="flex flex-col items-center justify-center py-12 px-4 text-center"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <motion.div 
+        <motion.div
           className="text-4xl mb-4"
           animate={{ rotate: [0, -10, 10, -10, 0] }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -51,13 +51,13 @@ export function ArticleListFeature() {
 
   if (!data) {
     return (
-      <motion.div 
+      <motion.div
         className="flex flex-col items-center justify-center py-12 px-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <motion.div 
+        <motion.div
           className="text-4xl mb-4"
           animate={{ scale: [1, 1.1, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
@@ -76,25 +76,25 @@ export function ArticleListFeature() {
       transition={{ duration: 0.4 }}
     >
       <NewsList
-      items={data.results}
-      renderItem={(article) => (
-        <NewsCard
-          key={article.id}
-          imageUrl={article.image_url}
-          title={article.title}
-          summary={article.summary}
-          date={new Date(article.published_at).toLocaleDateString()}
-          site={article.news_site}
-          featured={article.featured}
-        >
-          {/* 버튼 등 children */}
-        </NewsCard>
-      )}
-      emptyText="표시할 기사가 없습니다."
-      page={page}
-      totalPages={totalPages}
-      onPageChange={handlePageChange}
-    />
+        items={data.results}
+        renderItem={(article) => (
+          <NewsCard
+            key={article.id}
+            imageUrl={article.image_url}
+            title={article.title}
+            summary={article.summary}
+            date={new Date(article.published_at).toLocaleDateString()}
+            site={article.news_site}
+            featured={article.featured}
+          >
+            {/* 버튼 등 children */}
+          </NewsCard>
+        )}
+        emptyText="표시할 기사가 없습니다."
+        page={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </motion.div>
   );
 }

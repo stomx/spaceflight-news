@@ -5,7 +5,8 @@ import { queryClient } from '../shared/api/query-client';
 
 const router = createRouter({ 
   routeTree,
-  basepath: '/spaceflight-news'
+  basepath: '/spaceflight-news',
+  scrollRestoration: true,
 });
 
 export function App() {

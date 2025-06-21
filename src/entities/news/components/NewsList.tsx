@@ -29,13 +29,13 @@ function NewsListComponent<T>({
   }
 
   return (
-    <motion.div 
+    <motion.div
       className="px-4 md:px-0"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <motion.section 
+      <motion.section
         className="flex flex-col gap-3 md:gap-4 mx-auto w-full max-w-3xl"
         initial="hidden"
         animate="visible"
