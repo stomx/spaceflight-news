@@ -3,7 +3,15 @@ import { Skeleton } from '@/shared/components/skeleton';
 import { motion } from 'framer-motion';
 import { memo } from 'react';
 
-export const NewsCardSkeleton = memo(function NewsCardSkeleton({ delay = 0 }: { delay?: number }) {
+interface NewsCardSkeletonProps {
+  delay?: number;
+  showBadge?: boolean;
+}
+
+export const NewsCardSkeleton = memo(function NewsCardSkeleton({
+  delay = 0,
+  showBadge = false
+}: NewsCardSkeletonProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -25,8 +33,8 @@ export const NewsCardSkeleton = memo(function NewsCardSkeleton({ delay = 0 }: { 
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-3/4" />
               </div>
-              {/* 특집 배지 스켈레톤 (가끔 표시) */}
-              {Math.random() > 0.7 && (
+              {/* 특집 배지 스켈레톤 (선택적 표시) */}
+              {showBadge && (
                 <Skeleton className="h-5 w-8 rounded-full" />
               )}
             </div>
@@ -59,7 +67,11 @@ export const NewsListSkeleton = memo(function NewsListSkeleton({ count = 3 }: { 
     <div className="px-4 md:px-0">
       <section className="flex flex-col gap-3 md:gap-4 mx-auto w-full max-w-3xl">
         {Array.from({ length: count }, (_, index) => (
-          <NewsCardSkeleton key={index} delay={index} />
+          <NewsCardSkeleton
+            key={index}
+            delay={index}
+            showBadge={index === 0 || index === 2} // 첫 번째와 세 번째 아이템에만 배지 표시
+          />
         ))}
       </section>
     </div>

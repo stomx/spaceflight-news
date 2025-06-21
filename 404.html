@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script>
+    // GitHub Pages SPA 라우팅 처리
+    // Rafael Pedicini의 방법을 기반으로 구현
+    (function () {
+      const basePath = '/spaceflight-news/';
+      const currentPath = window.location.pathname;
+
+      // base path를 제거하여 실제 앱 라우트 추출
+      let appRoute = currentPath;
+      if (currentPath.startsWith(basePath)) {
+        appRoute = currentPath.slice(basePath.length - 1); // '/' 포함하여 추출
+      }
+
+      // 루트 경로가 아닌 경우에만 리다이렉트 처리
+      if (appRoute !== '/') {
+        // 현재 경로와 쿼리 스트링을 세션 스토리지에 저장
+        const redirectPath = appRoute + window.location.search + window.location.hash;
+        sessionStorage.setItem('spa-redirect-path', redirectPath);
+      }
+
+      // base path의 index.html로 리다이렉트
+      window.location.replace(basePath);
+    })();
+  </script>
+</head>
+
+<body>
+  <div style="text-align: center; margin-top: 50px;">
+    <h2>Redirecting...</h2>
+    <p>You are being redirected to the application.</p>
+  </div>
+</body>
+
+</html>

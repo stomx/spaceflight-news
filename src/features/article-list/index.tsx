@@ -2,7 +2,7 @@ import { NewsCard } from '@/entities/news/components/NewsCard';
 import { NewsListSkeleton } from '@/entities/news/components/NewsCardSkeleton';
 import { NewsList } from '@/entities/news/components/NewsList';
 import { useNewsListModel } from '@/shared/hooks/useNewsListModel';
-import { DEFAULT_PAGE, DEFAULT_LIMIT } from '@/shared/config';
+import { cleanSearchParams } from '@/shared/lib/utils';
 import type { Article } from '@/shared/types/news';
 import { motion } from 'framer-motion';
 import { useNavigate } from '@tanstack/react-router';
@@ -12,13 +12,8 @@ export function ArticleListFeature() {
   const navigate = useNavigate();
 
   const handlePageChange = (newPage: number) => {
-    const searchParams = {
-      ...search,
-      ...(newPage !== DEFAULT_PAGE ? { page: newPage } : {}),
-      ...(limit !== DEFAULT_LIMIT ? { limit } : {}),
-    };
-
-    navigate({ search: searchParams });
+    const searchParams = cleanSearchParams(search, newPage, limit);
+    navigate({ search: searchParams as never });
   };
 
   if (isLoading) {

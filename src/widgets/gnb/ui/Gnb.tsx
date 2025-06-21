@@ -1,5 +1,6 @@
 import { Button } from '@/shared/components/button';
 import { DEFAULT_LIMIT } from '@/shared/config';
+import { cleanSearchParams } from '@/shared/lib/utils';
 import type { SearchParams } from '@/shared/types/news';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Link, useMatchRoute, useNavigate, useSearch } from '@tanstack/react-router';
@@ -27,19 +28,13 @@ export function Gnb() {
 
   const isArticleDetail = !!matchRoute({ to: '/articles/$articleId' });
   const isBlogDetail = !!matchRoute({ to: '/blogs/$blogId' });
-  const isDetailPage = isArticleDetail || isBlogDetail; const handleBack = () => {
+  const isDetailPage = isArticleDetail || isBlogDetail;
+
+  const handleBack = () => {
     const page = Number(search.page) || 1;
     const limit = Number(search.limit) || DEFAULT_LIMIT;
 
-    const searchParams: SearchParams = {};
-
-    // 기본값과 다를 때만 포함
-    if (page !== 1) {
-      searchParams.page = page;
-    }
-    if (limit !== DEFAULT_LIMIT) {
-      searchParams.limit = limit;
-    }
+    const searchParams = cleanSearchParams(search, page, limit) as SearchParams;
 
     if (isArticleDetail) {
       navigate({ to: '/articles', search: searchParams });
