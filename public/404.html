@@ -11,27 +11,16 @@
       const basePath = '/spaceflight-news/';
       const currentPath = window.location.pathname;
 
-      // base path를 제거하여 실제 앱 라우트 추출
-      let appRoute = '/';
-      if (currentPath.startsWith(basePath)) {
-        const pathAfterBase = currentPath.slice(basePath.length);
-        appRoute = pathAfterBase ? '/' + pathAfterBase : '/';
-      } else if (currentPath !== '/') {
-        // base path 없이 직접 접근한 경우 (예: github.io/articles)
-        appRoute = currentPath;
-      }
-
       // 루트 경로가 아닌 경우에만 리다이렉트 처리
-      if (appRoute !== '/') {
-        // 현재 경로, 쿼리 스트링, 해시를 모두 포함하여 저장
-        const redirectPath = appRoute + window.location.search + window.location.hash;
+      if (currentPath !== basePath && currentPath !== '/') {
+        // 현재 전체 경로, 쿼리 스트링, 해시를 모두 포함하여 저장
+        const redirectPath = currentPath + window.location.search + window.location.hash;
         sessionStorage.setItem('spa-redirect-path', redirectPath);
 
         // 디버깅을 위한 정보 저장 (개발 시에만)
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
           console.log('SPA Redirect Debug:', {
             originalPath: currentPath,
-            extractedRoute: appRoute,
             redirectPath: redirectPath,
             basePath: basePath
           });
