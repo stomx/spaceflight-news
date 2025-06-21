@@ -1,6 +1,10 @@
 import { Button } from '@/shared/components/button';
+import { DEFAULT_LIMIT } from '@/shared/config';
+import { cleanSearchParams } from '@/shared/lib/utils';
+import type { SearchParams } from '@/shared/types/news';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Link, useMatchRoute, useNavigate, useSearch } from '@tanstack/react-router';
+import { motion } from 'framer-motion';
 import { useMemo } from 'react';
 
 export function Gnb() {
@@ -27,37 +31,76 @@ export function Gnb() {
   const isDetailPage = isArticleDetail || isBlogDetail;
 
   const handleBack = () => {
+    const page = Number(search.page) || 1;
+    const limit = Number(search.limit) || DEFAULT_LIMIT;
+
+    const searchParams = cleanSearchParams(search, page, limit) as SearchParams;
+
     if (isArticleDetail) {
-      navigate({ to: '/articles', search });
+      navigate({ to: '/articles', search: searchParams });
     } else if (isBlogDetail) {
-      navigate({ to: '/blogs', search });
+      navigate({ to: '/blogs', search: searchParams });
     }
   };
 
   return (
-    <nav className="flex justify-between items-center gap-4 bg-background shadow-sm py-2 pr-6 pl-2 border-b">
+    <motion.nav
+      className="flex justify-between items-center gap-4 bg-background shadow-sm py-2 pr-6 pl-2 border-b"
+      initial={{ y: -50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
       <div className="flex items-center gap-2">
         {isDetailPage && (
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleBack}
-            aria-label="목록으로"
-            className="p-0 w-8 h-8 cursor-pointer"
+          <motion.div
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -20, opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
-            <ArrowLeftIcon />
-          </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleBack}
+              aria-label="목록으로"
+              className="p-0 w-8 h-8"
+            >
+              <ArrowLeftIcon />
+            </Button>
+          </motion.div>
         )}
       </div>
-      <div>
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1,
+              delayChildren: 0.2
+            }
+          }
+        }}
+      >
         {menus.map((menu) => (
-          <Button asChild variant="ghost" size="sm" className="px-2" key={menu.to}>
-            <Link to={menu.to} className="[&.active]:font-bold capitalize">
-              {menu.label}
-            </Link>
-          </Button>
+          <motion.div
+            key={menu.to}
+            variants={{
+              hidden: { x: 20, opacity: 0 },
+              visible: { x: 0, opacity: 1 }
+            }}
+            style={{ display: 'inline-block' }}
+          >
+            <Button asChild variant="ghost" size="sm" className="px-2">
+              <Link to={menu.to} className="[&.active]:font-bold capitalize">
+                {menu.label}
+              </Link>
+            </Button>
+          </motion.div>
         ))}
-      </div>
-    </nav>
+      </motion.div>
+    </motion.nav>
   );
 }

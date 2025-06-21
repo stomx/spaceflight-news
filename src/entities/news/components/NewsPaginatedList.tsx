@@ -46,7 +46,6 @@ function NewsPaginatedListComponent<T>({
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
           variant="outline"
-          className="cursor-pointer"
         >
           이전
         </Button>
@@ -57,7 +56,6 @@ function NewsPaginatedListComponent<T>({
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages || totalPages === 0}
           variant="outline"
-          className="cursor-pointer"
         >
           다음
         </Button>

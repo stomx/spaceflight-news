@@ -34,6 +34,9 @@ build/
 # 테스트 커버리지
 coverage/
 
+# 작업 관리
+tasks/
+
 # OS별 파일
 .DS_Store
 Thumbs.db
@@ -55,3 +58,6 @@ memory-bank/
 
 # 문서 폴더 (개발 과정 문서)
 docs/
+
+# 작업 관리 폴더
+tasks/

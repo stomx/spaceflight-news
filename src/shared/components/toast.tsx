@@ -1,4 +1,5 @@
 import { type ReactNode, createContext, useCallback, useContext, useState } from 'react';
+import { uniqueId } from 'lodash-es';
 import { cn } from '../lib/utils';
 import { Button } from './button';
 import { Card } from './card';
@@ -37,7 +38,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const addToast = useCallback((toast: Omit<Toast, 'id'>) => {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = uniqueId('toast-');
     const newToast = { ...toast, id };
 
     setToasts((prev) => [...prev, newToast]);

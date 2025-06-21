@@ -50,7 +50,7 @@
       },
       "suspicious": {
         "noArrayIndexKey": "off",
-        "noExplicitAny": "warn",
+        "noExplicitAny": "error",
         "noConsoleLog": "warn"
       },
       "a11y": {

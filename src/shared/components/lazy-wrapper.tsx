@@ -10,14 +10,13 @@ export function LazyWrapper({ fallback = <div>Loading...</div>, children }: Lazy
 }
 
 // 동적 임포트 헬퍼 함수
-// biome-ignore lint/suspicious/noExplicitAny: React 컴포넌트 타입으로 any 필요
-export function createLazyComponent<T extends ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>,
+export function createLazyComponent<P extends Record<string, unknown> = Record<string, unknown>>(
+  importFn: () => Promise<{ default: ComponentType<P> }>,
   fallback?: React.ReactNode,
 ) {
   const LazyComponent = lazy(importFn);
 
-  return function WrappedLazyComponent(props: React.ComponentProps<T>) {
+  return function WrappedLazyComponent(props: P) {
     return (
       <Suspense fallback={fallback || <div>Loading...</div>}>
         <LazyComponent {...props} />

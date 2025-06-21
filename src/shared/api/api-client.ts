@@ -22,7 +22,8 @@ export class ApiClient {
      */
     this.instance.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem('accessToken');
+        // SSR 환경에서 localStorage가 없을 수 있으므로 안전하게 접근
+        const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
         if (token) {
           config.headers = config.headers || {};
           config.headers.Authorization = `Bearer ${token}`;
@@ -40,7 +41,10 @@ export class ApiClient {
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
-          // TODO: 로그아웃 처리, 알림 등 추가 가능
+          // 인증 만료 시 사용자에게 명확한 메시지 제공
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('accessToken');
+          }
           return Promise.reject(new Error('인증이 만료되었습니다. 다시 로그인해주세요.'));
         }
         return Promise.reject(error);
