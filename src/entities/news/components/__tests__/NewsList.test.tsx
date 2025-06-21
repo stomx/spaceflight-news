@@ -1,6 +1,4 @@
-import { mockNewsItem, mockNewsItemFeatured } from '@/test/test-utils';
-import { screen } from '@testing-library/dom';
-import { render } from '@testing-library/react';
+import { mockNewsItem, mockNewsItemFeatured, render, screen } from '@/test/test-utils';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NewsList } from '../NewsList';
