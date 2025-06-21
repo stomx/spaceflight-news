@@ -1,35 +1,47 @@
-// 예제 테스트 파일
-// NewsCard 컴포넌트 테스트
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@/test/test-utils';
+import { NewsCard } from '../NewsCard';
 
-/**
- * 실제 테스트 의존성이 설치되면 다음과 같은 테스트를 작성할 수 있습니다:
- * 
- * import { render, screen } from '@testing-library/react';
- * import { NewsCard } from '../entities/news/components/NewsCard';
- * 
- * describe('NewsCard', () => {
- *   const mockProps = {
- *     imageUrl: 'https://example.com/image.jpg',
- *     title: '테스트 뉴스',
- *     summary: '테스트 요약',
- *     date: '2024-01-01',
- *     site: '테스트 사이트',
- *   };
- * 
- *   it('should render news card with correct content', () => {
- *     render(<NewsCard {...mockProps} />);
- *     
- *     expect(screen.getByText('테스트 뉴스')).toBeInTheDocument();
- *     expect(screen.getByText('테스트 요약')).toBeInTheDocument();
- *     expect(screen.getByText('2024-01-01')).toBeInTheDocument();
- *     expect(screen.getByText('테스트 사이트')).toBeInTheDocument();
- *   });
- * 
- *   it('should display featured badge when featured is true', () => {
- *     render(<NewsCard {...mockProps} featured={true} />);
- *     expect(screen.getByText('특집')).toBeInTheDocument();
- *   });
- * });
- */
+describe('NewsCard', () => {
+  const mockProps = {
+    imageUrl: 'https://example.com/test-image.jpg',
+    title: '테스트 뉴스 제목',
+    summary: '테스트 뉴스 요약 내용입니다.',
+    date: '2024-01-01',
+    site: '테스트 사이트',
+  };
 
-export { };
+  it('뉴스 카드가 올바른 내용으로 렌더링되어야 한다', () => {
+    render(<NewsCard {...mockProps} />);
+    
+    expect(screen.getByText('테스트 뉴스 제목')).toBeInTheDocument();
+    expect(screen.getByText('테스트 뉴스 요약 내용입니다.')).toBeInTheDocument();
+    expect(screen.getByText('2024-01-01')).toBeInTheDocument();
+    expect(screen.getByText('테스트 사이트')).toBeInTheDocument();
+  });
+
+  it('featured가 true일 때 특집 배지를 표시해야 한다', () => {
+    render(<NewsCard {...mockProps} featured={true} />);
+    expect(screen.getByText('특집')).toBeInTheDocument();
+  });
+
+  it('featured가 false이거나 없을 때 특집 배지를 표시하지 않아야 한다', () => {
+    render(<NewsCard {...mockProps} featured={false} />);
+    expect(screen.queryByText('특집')).not.toBeInTheDocument();
+  });
+
+  it('이미지가 올바른 src와 alt 속성을 가져야 한다', () => {
+    render(<NewsCard {...mockProps} />);
+    const image = screen.getByRole('img');
+    expect(image).toHaveAttribute('alt', '테스트 뉴스 제목');
+  });
+
+  it('children 요소가 렌더링되어야 한다', () => {
+    render(
+      <NewsCard {...mockProps}>
+        <button>테스트 버튼</button>
+      </NewsCard>
+    );
+    expect(screen.getByText('테스트 버튼')).toBeInTheDocument();
+  });
+});
