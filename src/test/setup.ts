@@ -3,14 +3,14 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 // Mock IntersectionObserver for tests
+// biome-ignore lint/suspicious/noExplicitAny: 테스트 글로벌 객체 설정에 any 필요
 (globalThis as any).IntersectionObserver = class IntersectionObserver {
-  constructor() {}
   disconnect() {}
   observe() {}
   unobserve() {}
 };
 
-// Mock matchMedia for tests  
+// Mock matchMedia for tests
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn().mockImplementation((query: string) => ({
@@ -24,7 +24,3 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: vi.fn(),
   })),
 });
-
-console.log('Test setup loaded');
-
-export { };

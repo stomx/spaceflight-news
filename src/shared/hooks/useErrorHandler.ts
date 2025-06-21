@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export interface ErrorState {
   error: Error | null;
@@ -28,6 +28,7 @@ export function useErrorHandler() {
   }, []);
 
   const withErrorHandling = useCallback(
+    // biome-ignore lint/suspicious/noExplicitAny: 제네릭 함수 파라미터로 any 필요
     <T extends any[], R>(fn: (...args: T) => Promise<R>) => {
       return async (...args: T): Promise<R | null> => {
         try {
@@ -39,7 +40,7 @@ export function useErrorHandler() {
         }
       };
     },
-    [handleError, clearError]
+    [handleError, clearError],
   );
 
   return {

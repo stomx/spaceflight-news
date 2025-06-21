@@ -1,6 +1,6 @@
-// 테스트 유틸리티 함수들
-import { render, type RenderOptions } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+// 테스트 유틸리티 함수들
+import { type RenderOptions, render } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
 
 // 쿼리 클라이언트가 필요한 컴포넌트 테스트를 위한 커스텀 래퍼
@@ -21,12 +21,8 @@ function createTestQueryClient() {
 // 모든 프로바이더를 포함한 래퍼 컴포넌트
 function AllTheProviders({ children }: { children: ReactNode }) {
   const testQueryClient = createTestQueryClient();
-  
-  return (
-    <QueryClientProvider client={testQueryClient}>
-      {children}
-    </QueryClientProvider>
-  );
+
+  return <QueryClientProvider client={testQueryClient}>{children}</QueryClientProvider>;
 }
 
 // 커스텀 render 함수

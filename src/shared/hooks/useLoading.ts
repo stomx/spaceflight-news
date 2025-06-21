@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export interface LoadingState {
   isLoading: boolean;
@@ -14,14 +14,14 @@ export function useLoading(initialState = false) {
   }, []);
 
   const setLoadingState = useCallback((key: string, loading: boolean) => {
-    setLoadingStates(prev => ({
+    setLoadingStates((prev) => ({
       ...prev,
       [key]: loading,
     }));
   }, []);
 
   const clearLoadingState = useCallback((key: string) => {
-    setLoadingStates(prev => {
+    setLoadingStates((prev) => {
       const { [key]: _, ...rest } = prev;
       return rest;
     });
@@ -31,11 +31,15 @@ export function useLoading(initialState = false) {
     return globalLoading || Object.values(loadingStates).some(Boolean);
   }, [globalLoading, loadingStates]);
 
-  const isLoadingKey = useCallback((key: string) => {
-    return loadingStates[key] || false;
-  }, [loadingStates]);
+  const isLoadingKey = useCallback(
+    (key: string) => {
+      return loadingStates[key] || false;
+    },
+    [loadingStates],
+  );
 
   const withLoading = useCallback(
+    // biome-ignore lint/suspicious/noExplicitAny: 제네릭 함수 파라미터로 any 필요
     <T extends any[], R>(fn: (...args: T) => Promise<R>, key?: string) => {
       return async (...args: T): Promise<R> => {
         if (key) {
@@ -55,7 +59,7 @@ export function useLoading(initialState = false) {
         }
       };
     },
-    [setLoading, setLoadingState]
+    [setLoading, setLoadingState],
   );
 
   return {

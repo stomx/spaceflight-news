@@ -1,5 +1,5 @@
+import type { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
-import type { UseInfiniteQueryResult, InfiniteData } from '@tanstack/react-query';
 
 interface UseInfiniteScrollProps<T> {
   query: UseInfiniteQueryResult<InfiniteData<{ count: number; results: T[] }>, Error>;
@@ -7,11 +7,7 @@ interface UseInfiniteScrollProps<T> {
   enabled?: boolean;
 }
 
-export function useInfiniteScroll<T>({
-  query,
-  threshold = 1000,
-  enabled = true
-}: UseInfiniteScrollProps<T>) {
+export function useInfiniteScroll<T>({ query, threshold = 1000, enabled = true }: UseInfiniteScrollProps<T>) {
   const [isFetching, setIsFetching] = useState(false);
 
   const handleScroll = useCallback(() => {

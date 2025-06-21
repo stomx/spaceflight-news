@@ -9,16 +9,11 @@
       "out",
       "public",
       "tsconfig.*.json",
-      "routeTree.gen.ts"
+      "routeTree.gen.ts",
+      ".vscode",
+      "memory-bank"
     ],
-    "include": [
-      "**/*.ts",
-      "**/*.tsx",
-      "**/*.js",
-      "**/*.jsx",
-      "**/*.json",
-      "**/*.md"
-    ]
+    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json", "**/*.md"]
   },
   "formatter": {
     "enabled": true,
@@ -67,9 +62,7 @@
         "noDelete": "error"
       }
     },
-    "ignore": [
-      "dist"
-    ]
+    "ignore": ["dist"]
   },
   "javascript": {
     "formatter": {

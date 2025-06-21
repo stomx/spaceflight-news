@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getPaginatedList } from '../getPaginatedList';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { apiClient } from '../api-client';
+import { getPaginatedList } from '../getPaginatedList';
 
 // api-client 모킹
 vi.mock('../api-client', () => ({
@@ -44,7 +44,7 @@ describe('getPaginatedList', () => {
       getPaginatedList('articles', {
         limit: 10,
         offset: 0,
-      })
+      }),
     ).rejects.toThrow('API 에러');
   });
 });

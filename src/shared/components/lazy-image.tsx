@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect, memo } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { cn } from '../lib/utils';
 
 interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
-  alt: string;
+  alt?: string;
   className?: string;
   placeholder?: string;
   threshold?: number;
@@ -11,7 +11,7 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 
 export const LazyImage = memo(function LazyImage({
   src,
-  alt,
+  alt = '',
   className,
   placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDMyMCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iMTgwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNTQgNzRIMTY2VjEwNkgxNTRWNzRaIiBmaWxsPSIjQ0REMUQyIi8+CjxwYXRoIGQ9Ik0xNTQgOTBIMTY2VjEwNkgxNTRWOTBaIiBmaWxsPSIjQTFBMUFBIi8+Cjwvc3ZnPgo=',
   threshold = 0.1,
@@ -29,7 +29,7 @@ export const LazyImage = memo(function LazyImage({
           observer.disconnect();
         }
       },
-      { threshold }
+      { threshold },
     );
 
     if (imgRef.current) {
@@ -43,14 +43,10 @@ export const LazyImage = memo(function LazyImage({
     <img
       ref={imgRef}
       src={isInView ? src : placeholder}
-      alt={alt}
-      className={cn(
-        'transition-opacity duration-300',
-        isLoaded ? 'opacity-100' : 'opacity-0',
-        className
-      )}
+      className={cn('transition-opacity duration-300', isLoaded ? 'opacity-100' : 'opacity-0', className)}
       onLoad={() => isInView && setIsLoaded(true)}
       {...props}
+      alt={alt}
     />
   );
 });

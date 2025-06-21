@@ -1,5 +1,5 @@
-import { Card } from '@/shared/components/card';
 import { Badge } from '@/shared/components/badge';
+import { Card } from '@/shared/components/card';
 import { LazyImage } from '@/shared/components/lazy-image';
 import { memo } from 'react';
 
@@ -13,7 +13,15 @@ interface NewsCardProps {
   children?: React.ReactNode;
 }
 
-export const NewsCard = memo(function NewsCard({ imageUrl, title, summary, date, site, featured, children }: NewsCardProps) {
+export const NewsCard = memo(function NewsCard({
+  imageUrl,
+  title,
+  summary,
+  date,
+  site,
+  featured,
+  children,
+}: NewsCardProps) {
   return (
     <Card className="w-full">
       <div className="flex md:flex-row flex-col gap-4">

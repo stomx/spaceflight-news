@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import { useErrorHandler } from '../useErrorHandler';
 
 describe('useErrorHandler', () => {
@@ -78,7 +78,7 @@ describe('useErrorHandler', () => {
 
   it('withErrorHandling이 에러 상태를 지우고 새로운 시도를 해야 한다', async () => {
     const { result } = renderHook(() => useErrorHandler());
-    
+
     // 먼저 에러 상태를 만든다
     act(() => {
       result.current.handleError('이전 에러');
@@ -88,7 +88,7 @@ describe('useErrorHandler', () => {
     // 성공하는 함수를 실행한다
     const successfulFn = vi.fn().mockResolvedValue('성공');
     const wrappedFn = result.current.withErrorHandling(successfulFn);
-    
+
     await act(async () => await wrappedFn());
 
     expect(result.current.isError).toBe(false);

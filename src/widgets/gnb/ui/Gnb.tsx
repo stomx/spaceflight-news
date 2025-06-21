@@ -1,7 +1,7 @@
 import { Button } from '@/shared/components/button';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Link, useMatchRoute, useNavigate, useSearch } from '@tanstack/react-router';
 import { useMemo } from 'react';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 export function Gnb() {
   const menus = useMemo(

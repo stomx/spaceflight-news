@@ -1,7 +1,7 @@
-import { useState, useCallback, createContext, useContext, type ReactNode } from 'react';
-import { Card } from './card';
-import { Button } from './button';
+import { type ReactNode, createContext, useCallback, useContext, useState } from 'react';
 import { cn } from '../lib/utils';
+import { Button } from './button';
+import { Card } from './card';
 
 export interface Toast {
   id: string;
@@ -40,7 +40,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
     const id = Math.random().toString(36).substr(2, 9);
     const newToast = { ...toast, id };
 
-    setToasts(prev => [...prev, newToast]);
+    setToasts((prev) => [...prev, newToast]);
 
     if (!toast.persistent) {
       setTimeout(() => {
@@ -50,7 +50,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
   }, []);
 
   const removeToast = useCallback((id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
   const clearAllToasts = useCallback(() => {
@@ -72,7 +72,7 @@ function ToastContainer() {
 
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
-      {toasts.map(toast => (
+      {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} onClose={() => removeToast(toast.id)} />
       ))}
     </div>
@@ -96,17 +96,10 @@ function ToastItem({ toast, onClose }: ToastItemProps) {
     <Card className={cn('p-4 shadow-lg animate-in slide-in-from-right', typeStyles[toast.type])}>
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1">
-          {toast.title && (
-            <h4 className="font-semibold text-sm mb-1">{toast.title}</h4>
-          )}
+          {toast.title && <h4 className="font-semibold text-sm mb-1">{toast.title}</h4>}
           <p className="text-sm">{toast.message}</p>
         </div>
-        <Button
-          onClick={onClose}
-          variant="ghost"
-          size="sm"
-          className="h-6 w-6 p-0 hover:bg-transparent"
-        >
+        <Button onClick={onClose} variant="ghost" size="sm" className="h-6 w-6 p-0 hover:bg-transparent">
           ×
         </Button>
       </div>

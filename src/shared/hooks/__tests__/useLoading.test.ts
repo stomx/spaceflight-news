@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import { useLoading } from '../useLoading';
 
 describe('useLoading', () => {
@@ -63,9 +63,9 @@ describe('useLoading', () => {
     const successfulFn = vi.fn().mockResolvedValue('성공');
 
     const wrappedFn = result.current.withLoading(successfulFn);
-    
+
     // 비동기 함수 실행
-    let returnValue;
+    let returnValue: unknown;
     await act(async () => {
       returnValue = await wrappedFn('테스트 인자');
     });
@@ -80,7 +80,7 @@ describe('useLoading', () => {
     const successfulFn = vi.fn().mockResolvedValue('성공');
 
     const wrappedFn = result.current.withLoading(successfulFn, 'test-key');
-    
+
     // 비동기 함수 실행
     await act(async () => {
       await wrappedFn();
@@ -95,12 +95,12 @@ describe('useLoading', () => {
     const failingFn = vi.fn().mockRejectedValue(new Error('함수 실패'));
 
     const wrappedFn = result.current.withLoading(failingFn);
-    
+
     try {
       await act(async () => {
         await wrappedFn();
       });
-    } catch (error) {
+    } catch (_error) {
       // 에러가 발생해도 로딩 상태는 해제되어야 함
       expect(result.current.isLoading).toBe(false);
     }

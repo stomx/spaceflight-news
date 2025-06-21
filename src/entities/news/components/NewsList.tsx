@@ -24,9 +24,7 @@ function NewsListComponent<T>({
 
   return (
     <div>
-      <section className="flex flex-col gap-4 mx-auto w-full max-w-3xl">
-        {items.map(renderItem)}
-      </section>
+      <section className="flex flex-col gap-4 mx-auto w-full max-w-3xl">{items.map(renderItem)}</section>
       {page && totalPages && onPageChange && (
         <div className="flex justify-center items-center gap-2 mt-6">
           <Button onClick={() => onPageChange(page - 1)} disabled={page === 1} variant="outline">
