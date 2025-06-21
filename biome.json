@@ -1,8 +1,24 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "files": {
-    "ignore": ["dist", "node_modules", "coverage", "build", "out", "public", "tsconfig.*.json", "routeTree.gen.ts"],
-    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json", "**/*.md"]
+    "ignore": [
+      "dist",
+      "node_modules",
+      "coverage",
+      "build",
+      "out",
+      "public",
+      "tsconfig.*.json",
+      "routeTree.gen.ts"
+    ],
+    "include": [
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.json",
+      "**/*.md"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -22,13 +38,18 @@
       "recommended": true,
       "correctness": {
         "noUnusedImports": "error",
-        "useExhaustiveDependencies": "warn"
+        "useExhaustiveDependencies": "warn",
+        "noUnusedVariables": "error"
       },
       "style": {
-        "noNonNullAssertion": "warn"
+        "noNonNullAssertion": "warn",
+        "useConst": "error",
+        "useTemplate": "error"
       },
       "suspicious": {
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noExplicitAny": "warn",
+        "noConsoleLog": "warn"
       },
       "a11y": {
         "noLabelWithoutControl": "off",
@@ -36,10 +57,19 @@
         "useButtonType": "off"
       },
       "complexity": {
-        "noForEach": "warn"
+        "noForEach": "warn",
+        "noExcessiveCognitiveComplexity": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "error"
+      },
+      "performance": {
+        "noDelete": "error"
       }
     },
-    "ignore": ["dist"]
+    "ignore": [
+      "dist"
+    ]
   },
   "javascript": {
     "formatter": {

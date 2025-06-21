@@ -49,3 +49,6 @@ Thumbs.db
 # 메모리 뱅크 및 MCP 관련 파일
 memory-bank/
 .vscode/mcp.json
+
+# 문서 폴더 (개발 과정 문서)
+docs/

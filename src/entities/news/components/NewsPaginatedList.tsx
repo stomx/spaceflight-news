@@ -2,6 +2,7 @@ import { Button } from '@/shared/components/button';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import type React from 'react';
+import { memo } from 'react';
 
 interface NewsPaginatedListProps<T> {
   useQuery: (params: { limit: number; offset: number }) => UseQueryResult<{ count: number; results: T[] }, Error>;
@@ -10,7 +11,7 @@ interface NewsPaginatedListProps<T> {
   defaultLimit?: number;
 }
 
-export function NewsPaginatedList<T>({
+function NewsPaginatedListComponent<T>({
   useQuery,
   ListComponent,
   SkeletonComponent,
@@ -64,3 +65,6 @@ export function NewsPaginatedList<T>({
     </div>
   );
 }
+
+// 제네릭 컴포넌트의 메모화를 위한 타입 캐스팅
+export const NewsPaginatedList = memo(NewsPaginatedListComponent) as typeof NewsPaginatedListComponent;
