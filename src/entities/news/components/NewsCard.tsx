@@ -20,7 +20,6 @@ export const NewsCard = memo(function NewsCard({
   date,
   site,
   featured,
-  children,
 }: NewsCardProps) {
   return (
     <Card className="w-full">
@@ -28,7 +27,7 @@ export const NewsCard = memo(function NewsCard({
         <figure className="rounded-md w-1/2 aspect-video">
           <LazyImage src={imageUrl} alt={title} className="rounded-md w-full h-full object-cover" />
         </figure>
-        <div className="flex flex-col flex-1 gap-2">
+        <div className="flex flex-col flex-1 gap-2 py-0 md:py-6 px-4 md:px-0">
           <div className="flex items-center gap-2">
             <h2 className="flex-1 font-bold text-lg line-clamp-2">{title}</h2>
             {featured && <Badge variant="destructive">특집</Badge>}
@@ -39,7 +38,6 @@ export const NewsCard = memo(function NewsCard({
             <span>·</span>
             <span>{site}</span>
           </div>
-          <div className="flex gap-2 mt-2">{children}</div>
         </div>
       </div>
     </Card>
