@@ -9,6 +9,58 @@
 </head>
 
 <body>
+  <script>
+    // GitHub Pages SPA 라우팅 복원 처리
+    (function() {
+      const redirectPath = sessionStorage.getItem('spa-redirect-path');
+      
+      if (redirectPath) {
+        // 세션 스토리지에서 경로 제거
+        sessionStorage.removeItem('spa-redirect-path');
+        
+        // 디버깅을 위한 정보 출력 (개발 시에만)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          console.log('SPA Restore Debug:', {
+            redirectPath: redirectPath,
+            currentLocation: window.location.href
+          });
+        }
+        
+        // React 앱과 TanStack Router가 로드된 후 라우팅 처리
+        function restoreRoute() {
+          if (window.history && window.history.replaceState) {
+            // 현재 URL을 리다이렉트 경로로 교체
+            window.history.replaceState(null, null, redirectPath);
+            
+            // TanStack Router가 경로 변경을 감지할 수 있도록 이벤트 발생
+            const popStateEvent = new PopStateEvent('popstate', { 
+              state: { 
+                key: 'spa-redirect',
+                restored: true 
+              } 
+            });
+            window.dispatchEvent(popStateEvent);
+            
+            // 추가적으로 hashchange 이벤트도 발생 (해시가 있는 경우)
+            if (redirectPath.includes('#')) {
+              const hashChangeEvent = new HashChangeEvent('hashchange');
+              window.dispatchEvent(hashChangeEvent);
+            }
+          }
+        }
+        
+        // DOM 로드 완료 후 라우터 초기화를 기다린 후 복원
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(restoreRoute, 150);
+          });
+        } else {
+          setTimeout(restoreRoute, 150);
+        }
+      }
+    })();
+  </script>
+  
   <div id="root" class="m-0 mx-auto p-0 max-w-7xl"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
