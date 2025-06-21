@@ -43,7 +43,7 @@ export function Gnb() {
             variant="ghost"
             onClick={handleBack}
             aria-label="목록으로"
-            className="p-0 w-8 h-8 cursor-pointer"
+            className="p-0 w-8 h-8"
           >
             <ArrowLeftIcon />
           </Button>

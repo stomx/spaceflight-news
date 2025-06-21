@@ -1,4 +1,5 @@
 import { NewsCard } from '@/entities/news/components/NewsCard';
+import { NewsListSkeleton } from '@/entities/news/components/NewsCardSkeleton';
 import { NewsList } from '@/entities/news/components/NewsList';
 import { useNewsListModel } from '@/shared/hooks/useNewsListModel';
 import type { Blog } from '@/shared/types/news';
@@ -13,12 +14,7 @@ export function BlogListFeature() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12 px-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
-        <div className="text-muted-foreground text-sm">블로그를 불러오는 중...</div>
-      </div>
-    );
+    return <NewsListSkeleton count={limit} />;
   }
 
   if (isError) {

@@ -34,9 +34,9 @@ function NewsListComponent<T>({
       </section>
       {page && totalPages && onPageChange && (
         <div className="flex justify-center items-center gap-3 mt-8 px-4">
-          <Button 
-            onClick={() => onPageChange(page - 1)} 
-            disabled={page === 1} 
+          <Button
+            onClick={() => onPageChange(page - 1)}
+            disabled={page === 1}
             variant="outline"
             size="sm"
             className="min-w-[60px]"

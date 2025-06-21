@@ -11,6 +11,7 @@ interface NewsCardProps {
   site: string;
   featured?: boolean;
   children?: React.ReactNode;
+  onClick?: () => void;
 }
 
 export const NewsCard = memo(function NewsCard({
@@ -20,15 +21,19 @@ export const NewsCard = memo(function NewsCard({
   date,
   site,
   featured,
+  onClick,
 }: NewsCardProps) {
   return (
-    <Card className="w-full hover:shadow-md transition-shadow duration-200">
+    <Card 
+      className={`w-full hover:shadow-md transition-shadow duration-200 ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick}
+    >
       <div className="flex md:flex-row flex-col gap-3 md:gap-4">
         <figure className="rounded-md w-full md:w-1/2 h-48 md:h-auto aspect-none md:aspect-video flex-shrink-0">
-          <LazyImage 
-            src={imageUrl} 
-            alt={title} 
-            className="rounded-md w-full h-full object-cover" 
+          <LazyImage
+            src={imageUrl}
+            alt={title}
+            className="rounded-md w-full h-full object-cover"
           />
         </figure>
         <div className="flex flex-col flex-1 gap-2 py-3 md:py-6 px-4 md:px-0 min-h-0">
