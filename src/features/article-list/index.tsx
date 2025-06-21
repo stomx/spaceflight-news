@@ -12,9 +12,35 @@ export function ArticleListFeature() {
     navigate({ search: { ...search, page: newPage, limit } });
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (isError) return <div>에러 발생: {error?.message}</div>;
-  if (!data) return <div>데이터가 없습니다.</div>;
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 px-4">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+        <div className="text-muted-foreground text-sm">기사를 불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+        <div className="text-4xl mb-4">⚠️</div>
+        <div className="text-lg font-medium mb-2">기사를 불러올 수 없습니다</div>
+        <div className="text-muted-foreground text-sm">
+          {error?.message || '네트워크를 확인하고 다시 시도해주세요.'}
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 px-4">
+        <div className="text-4xl mb-4">📭</div>
+        <div className="text-muted-foreground">데이터가 없습니다.</div>
+      </div>
+    );
+  }
 
   return (
     <NewsList
