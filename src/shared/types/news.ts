@@ -39,3 +39,9 @@ export interface PaginatedResponse<T> {
 
 export type PaginatedArticleList = PaginatedResponse<Article>;
 export type PaginatedBlogList = PaginatedResponse<Blog>;
+
+// 검색 파라미터 타입 정의
+export interface SearchParams {
+  page?: number;
+  limit?: number;
+}

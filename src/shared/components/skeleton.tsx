@@ -15,7 +15,7 @@ function Skeleton({ className, ...props }: SkeletonProps & React.ComponentProps<
       }}
       transition={{
         duration: 1.5,
-        repeat: Infinity,
+        repeat: Number.POSITIVE_INFINITY,
         ease: "easeInOut"
       }}
       {...props}

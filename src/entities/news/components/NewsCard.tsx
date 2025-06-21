@@ -22,6 +22,7 @@ export const NewsCard = memo(function NewsCard({
   date,
   site,
   featured,
+  children,
   onClick,
 }: NewsCardProps) {
   return (
@@ -63,6 +64,11 @@ export const NewsCard = memo(function NewsCard({
               <span className="shrink-0">·</span>
               <span className="truncate">{site}</span>
             </div>
+            {children && (
+              <div className="mt-3">
+                {children}
+              </div>
+            )}
           </div>
         </div>
       </Card>

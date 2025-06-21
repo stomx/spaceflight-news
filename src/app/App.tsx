@@ -3,7 +3,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { QueryProvider } from './providers/query-provider';
 import { queryClient } from '../shared/api/query-client';
 
-const router = createRouter({ 
+const router = createRouter({
   routeTree,
   basepath: '/spaceflight-news',
   scrollRestoration: true,
