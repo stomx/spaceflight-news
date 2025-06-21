@@ -17,7 +17,10 @@ export function useErrorHandler() {
       error: errorObj,
       isError: true,
     });
-    console.error('Error handled:', errorObj);
+    // 개발환경에서만 콘솔에 로그 출력
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error handled:', errorObj);
+    }
   }, []);
 
   const clearError = useCallback(() => {
