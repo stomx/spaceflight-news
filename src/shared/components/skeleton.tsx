@@ -1,7 +1,26 @@
+import { motion } from 'framer-motion';
 import { cn } from '@/shared/lib/utils';
 
-function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="skeleton" className={cn('bg-accent animate-pulse rounded-md', className)} {...props} />;
+interface SkeletonProps {
+  className?: string;
+}
+
+function Skeleton({ className, ...props }: SkeletonProps & React.ComponentProps<typeof motion.div>) {
+  return (
+    <motion.div
+      data-slot="skeleton"
+      className={cn('bg-accent rounded-md', className)}
+      animate={{
+        opacity: [0.4, 0.8, 0.4],
+      }}
+      transition={{
+        duration: 1.5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+      {...props}
+    />
+  );
 }
 
 export { Skeleton };

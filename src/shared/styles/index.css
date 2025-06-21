@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *)); 
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -114,26 +114,28 @@
   * {
     @apply border-border;
   }
-  
+
   /* 포커스 가능한 요소들에만 outline 적용 */
   :focus-visible {
     @apply outline-ring/50 outline-2 outline-offset-2;
   }
-  
+
   /* 텍스트 입력 요소들의 커서 제어 */
-  input, textarea, [contenteditable] {
+  input,
+  textarea,
+  [contenteditable] {
     caret-color: var(--foreground);
   }
-  
+
   /* 일반 요소들의 커서 숨김 */
-  div:not([contenteditable]), 
-  span:not([contenteditable]), 
+  div:not([contenteditable]),
+  span:not([contenteditable]),
   p:not([contenteditable]),
   section:not([contenteditable]),
   article:not([contenteditable]) {
     caret-color: transparent;
   }
-  
+
   body {
     @apply bg-background text-foreground;
   }

@@ -1,4 +1,5 @@
 import { Button } from '@/shared/components/button';
+import { motion } from 'framer-motion';
 import { memo } from 'react';
 
 interface NewsListProps<T> {
@@ -28,10 +29,28 @@ function NewsListComponent<T>({
   }
 
   return (
-    <div className="px-4 md:px-0">
-      <section className="flex flex-col gap-3 md:gap-4 mx-auto w-full max-w-3xl">
+    <motion.div 
+      className="px-4 md:px-0"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.section 
+        className="flex flex-col gap-3 md:gap-4 mx-auto w-full max-w-3xl"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1
+            }
+          }
+        }}
+      >
         {items.map(renderItem)}
-      </section>
+      </motion.section>
       {page && totalPages && onPageChange && (
         <div className="flex justify-center items-center gap-3 mt-8 px-4">
           <Button
@@ -57,7 +76,7 @@ function NewsListComponent<T>({
           </Button>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 

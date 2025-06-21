@@ -1,6 +1,7 @@
 import { Badge } from '@/shared/components/badge';
 import { Card } from '@/shared/components/card';
 import { LazyImage } from '@/shared/components/lazy-image';
+import { motion } from 'framer-motion';
 import { memo } from 'react';
 
 interface NewsCardProps {
@@ -24,10 +25,17 @@ export const NewsCard = memo(function NewsCard({
   onClick,
 }: NewsCardProps) {
   return (
-    <Card 
-      className={`w-full hover:shadow-md transition-shadow duration-200 ${onClick ? 'cursor-pointer' : ''}`}
-      onClick={onClick}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
+      <Card
+        className={`w-full hover:shadow-md transition-shadow duration-200 ${onClick ? 'cursor-pointer' : ''}`}
+        onClick={onClick}
+      >
       <div className="flex md:flex-row flex-col gap-3 md:gap-4">
         <figure className="rounded-md w-full md:w-1/2 h-48 md:h-auto aspect-none md:aspect-video flex-shrink-0">
           <LazyImage
@@ -58,5 +66,6 @@ export const NewsCard = memo(function NewsCard({
         </div>
       </div>
     </Card>
+    </motion.div>
   );
 });
