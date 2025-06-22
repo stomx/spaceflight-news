@@ -39,11 +39,7 @@ export const NewsCard = memo(function NewsCard({
       >
         <div className="flex md:flex-row flex-col gap-3 md:gap-4">
           <figure className="rounded-md w-full md:w-1/2 h-48 md:h-auto aspect-none md:aspect-video flex-shrink-0">
-            <LazyImage
-              src={imageUrl}
-              alt={title}
-              className="rounded-md w-full h-full object-cover"
-            />
+            <LazyImage src={imageUrl} alt={title} className="rounded-md w-full h-full object-cover" />
           </figure>
           <div className="flex flex-col flex-1 gap-2 py-3 md:py-6 px-4 md:px-0 min-h-0">
             <div className="flex items-start gap-2">
@@ -64,11 +60,7 @@ export const NewsCard = memo(function NewsCard({
               <span className="shrink-0">·</span>
               <span className="truncate">{site}</span>
             </div>
-            {children && (
-              <div className="mt-3">
-                {children}
-              </div>
-            )}
+            {children && <div className="mt-3">{children}</div>}
           </div>
         </div>
       </Card>

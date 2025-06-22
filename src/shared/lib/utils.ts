@@ -1,6 +1,6 @@
+import { DEFAULT_LIMIT, DEFAULT_PAGE } from '@/shared/config';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { DEFAULT_PAGE, DEFAULT_LIMIT } from '@/shared/config';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -16,7 +16,7 @@ export function cn(...inputs: ClassValue[]) {
 export function cleanSearchParams(
   search: Record<string, unknown>,
   page: number,
-  limit: number
+  limit: number,
 ): Record<string, unknown> {
   const cleanedParams = { ...search };
 
