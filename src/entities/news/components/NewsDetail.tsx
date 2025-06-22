@@ -3,7 +3,7 @@ import { Card } from '@/shared/components/card';
 import { LazyImage } from '@/shared/components/lazy-image';
 import type { Article, Blog } from '@/shared/types/news';
 import { motion } from 'framer-motion';
-import { Calendar, ExternalLink, Globe, Rocket, Star, User } from 'lucide-react';
+import { Calendar, ExternalLink, Globe, Rocket, Star, User, Linkedin, Twitter } from 'lucide-react';
 import { memo } from 'react';
 
 interface NewsDetailProps {
@@ -94,46 +94,84 @@ export const NewsDetail = memo(function NewsDetail({ news, onExternalLinkClick }
                       <div>
                         <p className="font-medium">{author.name}</p>
                         {author.socials && (
-                          <div className="flex gap-2 mt-2">
+                          <div className="flex flex-wrap gap-2 mt-3">
                             {author.socials.x && (
-                              <a
+                              <motion.a
                                 href={author.socials.x}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-blue-600 hover:underline"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                               >
+                                <Twitter className="w-3 h-3" />
                                 X
-                              </a>
+                              </motion.a>
                             )}
                             {author.socials.linkedin && (
-                              <a
+                              <motion.a
                                 href={author.socials.linkedin}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-blue-600 hover:underline"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                               >
+                                <Linkedin className="w-3 h-3" />
                                 LinkedIn
-                              </a>
+                              </motion.a>
                             )}
                             {author.socials.mastodon && (
-                              <a
+                              <motion.a
                                 href={author.socials.mastodon}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-blue-600 hover:underline"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                               >
+                                <Globe className="w-3 h-3" />
                                 Mastodon
-                              </a>
+                              </motion.a>
                             )}
                             {author.socials.bluesky && (
-                              <a
+                              <motion.a
                                 href={author.socials.bluesky}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-blue-600 hover:underline"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-sky-500 text-white rounded-full hover:bg-sky-600 transition-colors"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                               >
+                                <Globe className="w-3 h-3" />
                                 Bluesky
-                              </a>
+                              </motion.a>
+                            )}
+                            {author.socials.youtube && (
+                              <motion.a
+                                href={author.socials.youtube}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                              >
+                                <Globe className="w-3 h-3" />
+                                YouTube
+                              </motion.a>
+                            )}
+                            {author.socials.instagram && (
+                              <motion.a
+                                href={author.socials.instagram}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full hover:from-purple-600 hover:to-pink-600 transition-all"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                              >
+                                <Globe className="w-3 h-3" />
+                                Instagram
+                              </motion.a>
                             )}
                           </div>
                         )}
