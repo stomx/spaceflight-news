@@ -42,11 +42,7 @@ function NewsPaginatedListComponent<T>({
     <div className="flex flex-col gap-4 mx-auto w-full max-w-3xl">
       <ListComponent items={data.results} />
       <div className="flex justify-center items-center gap-2 mt-6">
-        <Button
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 1}
-          variant="outline"
-        >
+        <Button onClick={() => handlePageChange(page - 1)} disabled={page === 1} variant="outline">
           이전
         </Button>
         <span className="text-muted-foreground text-sm">

@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { cn } from '@/shared/lib/utils';
+import { motion } from 'framer-motion';
 
 interface SkeletonProps {
   className?: string;
@@ -16,7 +16,7 @@ function Skeleton({ className, ...props }: SkeletonProps & React.ComponentProps<
       transition={{
         duration: 1.5,
         repeat: Number.POSITIVE_INFINITY,
-        ease: "easeInOut"
+        ease: 'easeInOut',
       }}
       {...props}
     />
