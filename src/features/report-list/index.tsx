@@ -79,12 +79,12 @@ export function ReportListFeature() {
             summary={report.summary}
             date={new Date(report.published_at).toLocaleDateString()}
             site={report.news_site}
-            featured={report.featured}
+            featured={false} // Reports don't have featured property
             onClick={() => {
               const searchParams = cleanSearchParams(search, page, limit);
               navigate({
                 to: `/reports/${report.id}`,
-                search: searchParams as never
+                search: searchParams as never,
               });
             }}
           >

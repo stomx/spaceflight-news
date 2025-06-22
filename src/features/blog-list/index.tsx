@@ -84,7 +84,7 @@ export function BlogListFeature() {
               const searchParams = cleanSearchParams(search, page, limit);
               navigate({
                 to: `/blogs/${blog.id}`,
-                search: searchParams as never
+                search: searchParams as never,
               });
             }}
           >

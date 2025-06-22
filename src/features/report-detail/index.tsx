@@ -8,13 +8,7 @@ interface ReportDetailFeatureProps {
 }
 
 export function ReportDetailFeature({ reportId }: ReportDetailFeatureProps) {
-  // 디버깅을 위한 로깅
-  console.log('ReportDetailFeature - reportId:', reportId);
-
   const { data: report, isLoading, isError, error } = useReportQuery(reportId);
-
-  // 디버깅을 위한 로깅
-  console.log('ReportDetailFeature - data:', report, 'isLoading:', isLoading, 'isError:', isError, 'error:', error);
 
   const handleBackClick = () => {
     // 에러 상태에서만 사용되는 함수
@@ -27,21 +21,21 @@ export function ReportDetailFeature({ reportId }: ReportDetailFeatureProps) {
   };
 
   // 임시 테스트: reportId가 "test"일 때 더미 데이터 표시
-  if (reportId === "test") {
+  if (reportId === 'test') {
     const dummyReport = {
       id: 9999,
-      title: "Test Report",
+      title: 'Test Report',
       authors: [],
-      url: "https://example.com",
-      image_url: "https://via.placeholder.com/400x200",
-      news_site: "Test Site",
-      summary: "This is a test report to verify the component works correctly.",
-      published_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-01T00:00:00Z",
+      url: 'https://example.com',
+      image_url: 'https://via.placeholder.com/400x200',
+      news_site: 'Test Site',
+      summary: 'This is a test report to verify the component works correctly.',
+      published_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z',
       featured: false,
       launches: [],
       events: [],
-      type: 'report' as const
+      type: 'report' as const,
     };
 
     return (
@@ -138,7 +132,7 @@ export function ReportDetailFeature({ reportId }: ReportDetailFeatureProps) {
           ...report,
           featured: false, // Reports에는 featured 필드가 없으므로 기본값 제공
           launches: [], // Reports에는 launches 필드가 없으므로 빈 배열 제공
-          events: [] // Reports에는 events 필드가 없으므로 빈 배열 제공
+          events: [], // Reports에는 events 필드가 없으므로 빈 배열 제공
         }}
         onExternalLinkClick={handleExternalLinkClick}
       />
