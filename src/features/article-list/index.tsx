@@ -4,8 +4,8 @@ import { NewsList } from '@/entities/news/components/NewsList';
 import { useNewsListModel } from '@/shared/hooks/useNewsListModel';
 import { cleanSearchParams } from '@/shared/lib/utils';
 import type { Article } from '@/shared/types/news';
-import { motion } from 'framer-motion';
 import { useNavigate } from '@tanstack/react-router';
+import { motion } from 'framer-motion';
 
 export function ArticleListFeature() {
   const { data, isLoading, isError, error, page, limit, totalPages, search } = useNewsListModel<Article>('articles');
@@ -18,11 +18,7 @@ export function ArticleListFeature() {
 
   if (isLoading) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
         <NewsListSkeleton count={limit} />
       </motion.div>
     );
@@ -72,11 +68,7 @@ export function ArticleListFeature() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <NewsList
         items={data.results}
         renderItem={(article) => (
@@ -88,6 +80,13 @@ export function ArticleListFeature() {
             date={new Date(article.published_at).toLocaleDateString()}
             site={article.news_site}
             featured={article.featured}
+            onClick={() => {
+              const searchParams = cleanSearchParams(search, page, limit);
+              navigate({
+                to: `/articles/${article.id}`,
+                search: searchParams as never
+              });
+            }}
           >
             {/* 버튼 등 children */}
           </NewsCard>

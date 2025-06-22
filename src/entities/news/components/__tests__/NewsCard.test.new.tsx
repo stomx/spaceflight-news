@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@/test/test-utils';
+import { describe, expect, it } from 'vitest';
 import { NewsCard } from '../NewsCard';
 
 describe('NewsCard', () => {
@@ -40,7 +40,7 @@ describe('NewsCard', () => {
     render(
       <NewsCard {...mockProps}>
         <button>테스트 버튼</button>
-      </NewsCard>
+      </NewsCard>,
     );
     expect(screen.getByText('테스트 버튼')).toBeInTheDocument();
   });
