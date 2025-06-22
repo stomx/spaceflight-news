@@ -10,7 +10,7 @@ interface NewsCardSkeletonProps {
 
 export const NewsCardSkeleton = memo(function NewsCardSkeleton({
   delay = 0,
-  showBadge = false
+  showBadge = false,
 }: NewsCardSkeletonProps) {
   return (
     <motion.div
@@ -34,9 +34,7 @@ export const NewsCardSkeleton = memo(function NewsCardSkeleton({
                 <Skeleton className="h-4 w-3/4" />
               </div>
               {/* 특집 배지 스켈레톤 (선택적 표시) */}
-              {showBadge && (
-                <Skeleton className="h-5 w-8 rounded-full" />
-              )}
+              {showBadge && <Skeleton className="h-5 w-8 rounded-full" />}
             </div>
 
             {/* 요약 텍스트 스켈레톤 */}

@@ -48,7 +48,7 @@ export function Gnb() {
       className="flex justify-between items-center gap-4 bg-background shadow-sm py-2 pr-6 pl-2 border-b"
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       <div className="flex items-center gap-2">
         {isDetailPage && (
@@ -59,13 +59,12 @@ export function Gnb() {
             transition={{ duration: 0.2 }}
           >
             <Button
-              size="icon"
               variant="ghost"
               onClick={handleBack}
-              aria-label="목록으로"
-              className="p-0 w-8 h-8"
+              className="flex items-center gap-2 px-3 py-2 h-auto text-sm"
             >
-              <ArrowLeftIcon />
+              <ArrowLeftIcon className="w-4 h-4" />
+              {isArticleDetail ? '기사 목록으로 돌아가기' : '블로그 목록으로 돌아가기'}
             </Button>
           </motion.div>
         )}
@@ -79,9 +78,9 @@ export function Gnb() {
             opacity: 1,
             transition: {
               staggerChildren: 0.1,
-              delayChildren: 0.2
-            }
-          }
+              delayChildren: 0.2,
+            },
+          },
         }}
       >
         {menus.map((menu) => (
@@ -89,7 +88,7 @@ export function Gnb() {
             key={menu.to}
             variants={{
               hidden: { x: 20, opacity: 0 },
-              visible: { x: 0, opacity: 1 }
+              visible: { x: 0, opacity: 1 },
             }}
             style={{ display: 'inline-block' }}
           >

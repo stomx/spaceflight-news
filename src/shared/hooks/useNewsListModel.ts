@@ -1,5 +1,5 @@
+import { DEFAULT_LIMIT, DEFAULT_PAGE } from '@/shared/config';
 import { usePaginatedListQuery } from '@/shared/hooks/usePaginatedListQuery';
-import { DEFAULT_PAGE, DEFAULT_LIMIT } from '@/shared/config';
 import { useSearch } from '@tanstack/react-router';
 
 /**
