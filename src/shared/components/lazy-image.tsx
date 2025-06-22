@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { cn } from '../lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
