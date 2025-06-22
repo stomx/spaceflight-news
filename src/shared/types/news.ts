@@ -8,9 +8,24 @@ export interface EventInfo {
   provider: string;
 }
 
+export interface AuthorSocials {
+  x?: string;
+  youtube?: string;
+  instagram?: string;
+  linkedin?: string;
+  mastodon?: string;
+  bluesky?: string;
+}
+
+export interface Author {
+  name: string;
+  socials: AuthorSocials;
+}
+
 export interface NewsBase {
   id: number;
   title: string;
+  authors: Author[];
   url: string;
   image_url: string;
   news_site: string;

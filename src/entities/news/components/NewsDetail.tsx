@@ -3,7 +3,7 @@ import { Card } from '@/shared/components/card';
 import { LazyImage } from '@/shared/components/lazy-image';
 import type { Article, Blog } from '@/shared/types/news';
 import { motion } from 'framer-motion';
-import { Calendar, ExternalLink, Globe, Rocket, Star } from 'lucide-react';
+import { Calendar, ExternalLink, Globe, Rocket, Star, User } from 'lucide-react';
 import { memo } from 'react';
 
 interface NewsDetailProps {
@@ -79,6 +79,71 @@ export const NewsDetail = memo(function NewsDetail({ news, onExternalLinkClick }
           <div className="prose prose-gray max-w-none mb-8">
             <p className="text-lg leading-relaxed">{news.summary}</p>
           </div>
+
+          {/* 작성자 정보 */}
+          {news.authors && news.authors.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                <User className="w-5 h-5" />
+                작성자
+              </h3>
+              <div className="grid gap-3">
+                {news.authors.map((author, index) => (
+                  <Card key={`${author.name}-${index}`} className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">{author.name}</p>
+                        {author.socials && (
+                          <div className="flex gap-2 mt-2">
+                            {author.socials.x && (
+                              <a
+                                href={author.socials.x}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-blue-600 hover:underline"
+                              >
+                                X
+                              </a>
+                            )}
+                            {author.socials.linkedin && (
+                              <a
+                                href={author.socials.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-blue-600 hover:underline"
+                              >
+                                LinkedIn
+                              </a>
+                            )}
+                            {author.socials.mastodon && (
+                              <a
+                                href={author.socials.mastodon}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-blue-600 hover:underline"
+                              >
+                                Mastodon
+                              </a>
+                            )}
+                            {author.socials.bluesky && (
+                              <a
+                                href={author.socials.bluesky}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-blue-600 hover:underline"
+                              >
+                                Bluesky
+                              </a>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* 관련 정보 */}
           {(news.launches.length > 0 || news.events.length > 0) && (
