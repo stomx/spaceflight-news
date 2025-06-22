@@ -27,7 +27,7 @@ describe('Avatar Component', () => {
 
       const avatar = screen.getByTestId('avatar');
       expect(avatar).toHaveClass('relative', 'flex', 'size-8', 'shrink-0', 'overflow-hidden', 'rounded-full');
-    });    it('커스텀 클래스를 추가할 수 있다', () => {
+    }); it('커스텀 클래스를 추가할 수 있다', () => {
       render(
         <Avatar className="custom-class" data-testid="avatar">
           <AvatarImage src="/test.jpg" alt="테스트 이미지" />
@@ -66,7 +66,7 @@ describe('Avatar Component', () => {
 
       // Avatar 컴포넌트 자체는 렌더링됨
       expect(screen.getByTestId('avatar')).toBeInTheDocument();
-      
+
       // 이미지가 없어도 data-slot으로 DOM에 존재하는지 확인
       const avatarRoot = screen.getByTestId('avatar');
       expect(avatarRoot).toHaveAttribute('data-slot', 'avatar');
@@ -84,7 +84,7 @@ describe('Avatar Component', () => {
       const avatar = document.querySelector('[data-slot="avatar"]');
       expect(avatar).toBeInTheDocument();
       expect(avatar).toHaveClass('test-avatar');
-      
+
       // Fallback 요소 확인 (이미지 로드 실패 시 표시됨)
       const fallback = document.querySelector('[data-slot="avatar-fallback"]');
       expect(fallback).toBeInTheDocument();
@@ -145,7 +145,7 @@ describe('Avatar Component', () => {
 
       expect(screen.getByTestId('avatar')).toBeInTheDocument();
       expect(screen.getByTestId('avatar-fallback')).toBeInTheDocument();
-      
+
       // Avatar와 Fallback 구조 확인
       const avatar = document.querySelector('[data-slot="avatar"]');
       const fallback = document.querySelector('[data-slot="avatar-fallback"]');

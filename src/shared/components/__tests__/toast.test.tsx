@@ -9,8 +9,8 @@ function ToastTester() {
   return (
     <div>
       <button
-        onClick={() => addToast({ 
-          title: '성공', 
+        onClick={() => addToast({
+          title: '성공',
           message: '작업이 완료되었습니다',
           type: 'success'
         })}
@@ -19,8 +19,8 @@ function ToastTester() {
         성공 토스트
       </button>
       <button
-        onClick={() => addToast({ 
-          title: '에러', 
+        onClick={() => addToast({
+          title: '에러',
           message: '오류가 발생했습니다',
           type: 'error'
         })}
@@ -29,8 +29,8 @@ function ToastTester() {
         에러 토스트
       </button>
       <button
-        onClick={() => addToast({ 
-          title: '경고', 
+        onClick={() => addToast({
+          title: '경고',
           message: '주의가 필요합니다',
           type: 'warning'
         })}
@@ -39,8 +39,8 @@ function ToastTester() {
         경고 토스트
       </button>
       <button
-        onClick={() => addToast({ 
-          title: '정보', 
+        onClick={() => addToast({
+          title: '정보',
           message: '정보입니다',
           type: 'info'
         })}
@@ -58,8 +58,8 @@ function ToastClearTester() {
   return (
     <div>
       <button
-        onClick={() => addToast({ 
-          title: '테스트', 
+        onClick={() => addToast({
+          title: '테스트',
           message: '테스트 메시지',
           type: 'info'
         })}
@@ -197,8 +197,8 @@ describe('Toast Component', () => {
 
         return (
           <button
-            onClick={() => addToast({ 
-              title: '커스텀', 
+            onClick={() => addToast({
+              title: '커스텀',
               message: '2초 후 사라집니다',
               type: 'info',
               duration: 2000
@@ -303,7 +303,7 @@ describe('Toast Component', () => {
       }
 
       // 에러 메시지를 콘솔에서 숨기기 위해 스파이 설정
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
       expect(() => {
         render(<TestComponent />);
