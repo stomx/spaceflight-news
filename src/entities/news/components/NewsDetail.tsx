@@ -1,13 +1,13 @@
 import { Badge } from '@/shared/components/badge';
 import { Card } from '@/shared/components/card';
 import { LazyImage } from '@/shared/components/lazy-image';
-import type { Article, Blog } from '@/shared/types/news';
+import type { Article, Blog, Report } from '@/shared/types/news';
 import { motion } from 'framer-motion';
 import { Calendar, ExternalLink, Globe, Rocket, Star, User, Linkedin, Twitter } from 'lucide-react';
 import { memo } from 'react';
 
 interface NewsDetailProps {
-  news: Article | Blog;
+  news: Article | Blog | Report;
   onExternalLinkClick?: (url: string) => void;
 }
 

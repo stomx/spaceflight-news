@@ -18,6 +18,10 @@ export function Gnb() {
         label: 'Blogs',
         to: '/blogs',
       },
+      {
+        label: 'Reports',
+        to: '/reports',
+      },
     ],
     [],
   );
@@ -28,7 +32,8 @@ export function Gnb() {
 
   const isArticleDetail = !!matchRoute({ to: '/articles/$articleId' });
   const isBlogDetail = !!matchRoute({ to: '/blogs/$blogId' });
-  const isDetailPage = isArticleDetail || isBlogDetail;
+  const isReportDetail = !!matchRoute({ to: '/reports/$reportId' });
+  const isDetailPage = isArticleDetail || isBlogDetail || isReportDetail;
 
   const handleBack = () => {
     const page = Number(search.page) || 1;
@@ -40,6 +45,8 @@ export function Gnb() {
       navigate({ to: '/articles', search: searchParams });
     } else if (isBlogDetail) {
       navigate({ to: '/blogs', search: searchParams });
+    } else if (isReportDetail) {
+      navigate({ to: '/reports', search: searchParams });
     }
   };
 
@@ -64,7 +71,9 @@ export function Gnb() {
               className="flex items-center gap-2 px-3 py-2 h-auto text-sm"
             >
               <ArrowLeftIcon className="w-4 h-4" />
-              {isArticleDetail ? '기사 목록으로 돌아가기' : '블로그 목록으로 돌아가기'}
+              {isArticleDetail && '기사 목록으로 돌아가기'}
+              {isBlogDetail && '블로그 목록으로 돌아가기'}
+              {isReportDetail && '보고서 목록으로 돌아가기'}
             </Button>
           </motion.div>
         )}
