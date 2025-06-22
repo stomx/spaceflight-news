@@ -80,7 +80,13 @@ export function ArticleListFeature() {
             date={new Date(article.published_at).toLocaleDateString()}
             site={article.news_site}
             featured={article.featured}
-            onClick={() => navigate({ to: `/articles/${article.id}` })}
+            onClick={() => {
+              const searchParams = cleanSearchParams(search, page, limit);
+              navigate({ 
+                to: `/articles/${article.id}`,
+                search: searchParams as never
+              });
+            }}
           >
             {/* 버튼 등 children */}
           </NewsCard>

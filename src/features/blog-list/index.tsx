@@ -80,7 +80,13 @@ export function BlogListFeature() {
             date={new Date(blog.published_at).toLocaleDateString()}
             site={blog.news_site}
             featured={blog.featured}
-            onClick={() => navigate({ to: `/blogs/${blog.id}` })}
+            onClick={() => {
+              const searchParams = cleanSearchParams(search, page, limit);
+              navigate({ 
+                to: `/blogs/${blog.id}`,
+                search: searchParams as never
+              });
+            }}
           >
             {/* 버튼 등 children */}
           </NewsCard>
