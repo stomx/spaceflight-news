@@ -82,7 +82,7 @@ export function ArticleListFeature() {
             featured={article.featured}
             onClick={() => {
               const searchParams = cleanSearchParams(search, page, limit);
-              navigate({ 
+              navigate({
                 to: `/articles/${article.id}`,
                 search: searchParams as never
               });

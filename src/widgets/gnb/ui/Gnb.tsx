@@ -58,9 +58,9 @@ export function Gnb() {
             exit={{ x: -20, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <Button 
-              variant="ghost" 
-              onClick={handleBack} 
+            <Button
+              variant="ghost"
+              onClick={handleBack}
               className="flex items-center gap-2 px-3 py-2 h-auto text-sm"
             >
               <ArrowLeftIcon className="w-4 h-4" />

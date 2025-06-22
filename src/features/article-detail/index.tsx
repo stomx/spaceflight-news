@@ -57,7 +57,7 @@ export function ArticleDetailFeature({ articleId }: ArticleDetailFeatureProps) {
         </p>
         <motion.button
           onClick={handleBackClick}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors cursor-pointer"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -79,7 +79,7 @@ export function ArticleDetailFeature({ articleId }: ArticleDetailFeatureProps) {
         <div className="text-muted-foreground">기사 정보가 없습니다.</div>
         <motion.button
           onClick={handleBackClick}
-          className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors cursor-pointer"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >

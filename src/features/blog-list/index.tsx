@@ -82,7 +82,7 @@ export function BlogListFeature() {
             featured={blog.featured}
             onClick={() => {
               const searchParams = cleanSearchParams(search, page, limit);
-              navigate({ 
+              navigate({
                 to: `/blogs/${blog.id}`,
                 search: searchParams as never
               });
