@@ -1,6 +1,5 @@
 import { NewsDetail } from '@/entities/news/components/NewsDetail';
 import { useArticleQuery } from '@/shared/hooks/useNewsQuery';
-import { useNavigate } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 
@@ -10,10 +9,10 @@ interface ArticleDetailFeatureProps {
 
 export function ArticleDetailFeature({ articleId }: ArticleDetailFeatureProps) {
   const { data: article, isLoading, isError, error } = useArticleQuery(articleId);
-  const navigate = useNavigate();
 
   const handleBackClick = () => {
-    navigate({ to: '/articles' });
+    // 에러 상태에서만 사용되는 함수
+    window.history.back();
   };
 
   const handleExternalLinkClick = (url: string) => {
@@ -93,19 +92,6 @@ export function ArticleDetailFeature({ articleId }: ArticleDetailFeatureProps) {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      {/* 뒤로가기 버튼 */}
-      <motion.button
-        onClick={handleBackClick}
-        className="inline-flex items-center gap-2 mb-6 px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3 }}
-        whileHover={{ x: -5 }}
-      >
-        <ArrowLeft className="w-4 h-4" />
-        기사 목록으로 돌아가기
-      </motion.button>
-
       {/* 기사 상세 */}
       <NewsDetail news={article} onExternalLinkClick={handleExternalLinkClick} />
     </div>
