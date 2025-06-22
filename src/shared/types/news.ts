@@ -19,7 +19,7 @@ export interface AuthorSocials {
 
 export interface Author {
   name: string;
-  socials: AuthorSocials;
+  socials?: AuthorSocials;
 }
 
 export interface NewsBase {
@@ -45,6 +45,19 @@ export interface Blog extends NewsBase {
   type?: 'blog';
 }
 
+export interface Report {
+  id: number;
+  title: string;
+  authors: Author[];
+  url: string;
+  image_url: string;
+  news_site: string;
+  summary: string;
+  published_at: string;
+  updated_at: string;
+  type?: 'report';
+}
+
 export interface PaginatedResponse<T> {
   count: number;
   next: string | null;
@@ -54,6 +67,7 @@ export interface PaginatedResponse<T> {
 
 export type PaginatedArticleList = PaginatedResponse<Article>;
 export type PaginatedBlogList = PaginatedResponse<Blog>;
+export type PaginatedReportList = PaginatedResponse<Report>;
 
 // 검색 파라미터 타입 정의
 export interface SearchParams {

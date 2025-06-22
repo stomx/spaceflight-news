@@ -3,12 +3,12 @@ import { NewsListSkeleton } from '@/entities/news/components/NewsCardSkeleton';
 import { NewsList } from '@/entities/news/components/NewsList';
 import { useNewsListModel } from '@/shared/hooks/useNewsListModel';
 import { cleanSearchParams } from '@/shared/lib/utils';
-import type { Blog } from '@/shared/types/news';
+import type { Report } from '@/shared/types/news';
 import { useNavigate } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 
-export function BlogListFeature() {
-  const { data, isLoading, isError, error, page, limit, totalPages, search } = useNewsListModel<Blog>('blogs');
+export function ReportListFeature() {
+  const { data, isLoading, isError, error, page, limit, totalPages, search } = useNewsListModel<Report>('reports');
   const navigate = useNavigate();
 
   const handlePageChange = (newPage: number) => {
@@ -39,7 +39,7 @@ export function BlogListFeature() {
         >
           ⚠️
         </motion.div>
-        <div className="text-lg font-medium mb-2">블로그를 불러올 수 없습니다</div>
+        <div className="text-lg font-medium mb-2">보고서를 불러올 수 없습니다</div>
         <div className="text-muted-foreground text-sm">
           {error?.message || '네트워크를 확인하고 다시 시도해주세요.'}
         </div>
@@ -71,19 +71,19 @@ export function BlogListFeature() {
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <NewsList
         items={data.results}
-        renderItem={(blog: Blog) => (
+        renderItem={(report) => (
           <NewsCard
-            key={blog.id}
-            imageUrl={blog.image_url}
-            title={blog.title}
-            summary={blog.summary}
-            date={new Date(blog.published_at).toLocaleDateString()}
-            site={blog.news_site}
-            featured={blog.featured}
+            key={report.id}
+            imageUrl={report.image_url}
+            title={report.title}
+            summary={report.summary}
+            date={new Date(report.published_at).toLocaleDateString()}
+            site={report.news_site}
+            featured={false} // Reports don't have featured property
             onClick={() => {
               const searchParams = cleanSearchParams(search, page, limit);
               navigate({
-                to: `/blogs/${blog.id}`,
+                to: `/reports/${report.id}`,
                 search: searchParams as never,
               });
             }}
@@ -91,7 +91,7 @@ export function BlogListFeature() {
             {/* 버튼 등 children */}
           </NewsCard>
         )}
-        emptyText="표시할 블로그가 없습니다."
+        emptyText="표시할 보고서가 없습니다."
         page={page}
         totalPages={totalPages}
         onPageChange={handlePageChange}

@@ -1,6 +1,6 @@
-# Spaceflight News 포트폴리오
+# Spaceflight News
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/stomx/spaceflight-news/releases)
+[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/stomx/spaceflight-news/releases)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.3-646CFF?logo=vite)](https://vitejs.dev/)
@@ -9,9 +9,9 @@
 
 > 🚀 **[라이브 데모 보기](https://your-demo-url.com)** | 📖 **[API 문서](https://api.spaceflightnewsapi.net/v4/docs)**
 
-이 프로젝트는 [Spaceflight News API](https://api.spaceflightnewsapi.net/v4/docs)를 활용하여 우주 비행 관련 최신 뉴스, 기사, 블로그, 이벤트 정보를 제공하는 포트폴리오 웹 애플리케이션입니다.
+이 프로젝트는 [Spaceflight News API](https://api.spaceflightnewsapi.net/v4/docs)를 활용하여 우주 비행 관련 최신 뉴스, 기사, 블로그, 보고서 정보를 제공하는 웹 애플리케이션입니다.
 React, Vite, TypeScript, TailwindCSS, FSD(Feature-Sliced Design) 아키텍처를 기반으로 개발되었으며,
-실제 API 연동, 상태 관리, 컴포넌트 설계, 코드 품질 관리 등 실무 역량을 보여주기 위한 목적의 포트폴리오입니다.
+실제 API 연동, 상태 관리, 컴포넌트 설계, 코드 품질 관리 등 현대적인 웹 개발 기술들을 활용합니다.
 
 ## 📸 스크린샷
 
@@ -41,8 +41,8 @@ React, Vite, TypeScript, TailwindCSS, FSD(Feature-Sliced Design) 아키텍처를
 
 ```bash
 # 프로젝트 클론
-git clone https://github.com/your-username/portfolio-spaceflight-news.git
-cd portfolio-spaceflight-news
+git clone https://github.com/your-username/spaceflight-news.git
+cd spaceflight-news
 
 # 의존성 설치
 npm install
@@ -71,14 +71,15 @@ npm run deploy
 
 | 명령어 | 설명 |
 |--------|------|
-| `npm run dev` | 개발 서버 실행 (HMR 지원) |
-| `npm run build` | 프로덕션 빌드 |
-| `npm run preview` | 빌드 결과 미리보기 |
-| `npm run lint` | Biome 린터 실행 |
-| `npm run format` | 코드 포맷팅 |
-| `npm run check` | 코드 품질 검사 |
-| `npm run fix` | 자동 수정 가능한 문제 해결 |
-| `npm run deploy` | GitHub Pages 배포 |
+| `yarn dev` | 개발 서버 실행 (HMR 지원) |
+| `yarn build` | 프로덕션 빌드 |
+| `yarn preview` | 빌드 결과 미리보기 |
+| `yarn biome-fix` | 자동 수정 가능한 린트 에러 수정 |
+| `yarn biome-ci` | CI 환경용 린트 검사 |
+| `yarn type-check` | 빌드 없이 타입 체크만 수행 |
+| `yarn test` | 테스트 실행 |
+| `yarn test:ui` | 테스트 UI 실행 |
+| `yarn test:coverage` | 테스트 커버리지 확인 |
 
 ## 🛠 기술 스택
 
@@ -142,9 +143,9 @@ src/
 | 레이어 | 역할 | 예시 |
 |--------|------|------|
 | **app** | 앱 초기화, 글로벌 Provider, 라우팅 설정 | App.tsx, query-provider.tsx |
-| **pages** | 라우트별 페이지 컴포넌트 및 라우트 상태 | /articles, /blogs, /articles/$id |
+| **pages** | 라우트별 페이지 컴포넌트 및 라우트 상태 | /articles, /blogs, /reports, /articles/$id |
 | **widgets** | 여러 레이어를 조합한 복합 UI 블록 | GNB, Footer, Sidebar |
-| **features** | 단일 목적의 독립적인 사용자 기능 | article-list, blog-list |
+| **features** | 단일 목적의 독립적인 사용자 기능 | article-list, blog-list, report-list |
 | **entities** | 도메인 모델, 비즈니스 로직, 도메인 UI | news (NewsCard, NewsList) |
 | **shared** | 전역 공통 리소스 (API, UI, 유틸, 타입) | api-client, Button, types |
 
@@ -161,6 +162,8 @@ src/
   - `GET /articles/{id}` - 기사 상세
   - `GET /blogs` - 블로그 목록
   - `GET /blogs/{id}` - 블로그 상세
+  - `GET /reports` - 보고서 목록
+  - `GET /reports/{id}` - 보고서 상세
 
 ### 환경 변수 설정
 
@@ -237,7 +240,7 @@ VITE_API_URL=https://api.spaceflightnewsapi.net/v4
 
 ## 👨‍💻 개발자 정보
 
-**Jaymon** - 포트폴리오 프로젝트  
+**Jaymon** - 개발자  
 📧 Email: stomx.work@kakao.com  
 🔗 LinkedIn: [stomx](https://www.linkedin.com/in/stomx/)
 
