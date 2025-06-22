@@ -1,13 +1,13 @@
 import { Badge } from '@/shared/components/badge';
 import { Card } from '@/shared/components/card';
 import { LazyImage } from '@/shared/components/lazy-image';
-import type { Article, Blog } from '@/shared/types/news';
+import type { Article, Blog, Report } from '@/shared/types/news';
 import { motion } from 'framer-motion';
-import { Calendar, ExternalLink, Globe, Rocket, Star, User, Linkedin, Twitter } from 'lucide-react';
+import { Calendar, ExternalLink, Globe, Linkedin, Rocket, Star, Twitter, User } from 'lucide-react';
 import { memo } from 'react';
 
 interface NewsDetailProps {
-  news: Article | Blog;
+  news: Article | Blog | Report;
   onExternalLinkClick?: (url: string) => void;
 }
 
@@ -42,7 +42,7 @@ export const NewsDetail = memo(function NewsDetail({ news, onExternalLinkClick }
         {/* 헤더 이미지 */}
         <div className="w-full h-64 md:h-80 lg:h-96 relative">
           <LazyImage src={news.image_url} alt={news.title} className="w-full h-full object-cover" />
-          {news.featured && (
+          {'featured' in news && news.featured && (
             <div className="absolute top-4 right-4">
               <Badge variant="destructive" className="text-sm">
                 <Star className="w-3 h-3 mr-1" />
@@ -104,8 +104,7 @@ export const NewsDetail = memo(function NewsDetail({ news, onExternalLinkClick }
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                               >
-                                <Twitter className="w-3 h-3" />
-                                X
+                                <Twitter className="w-3 h-3" />X
                               </motion.a>
                             )}
                             {author.socials.linkedin && (
@@ -184,9 +183,9 @@ export const NewsDetail = memo(function NewsDetail({ news, onExternalLinkClick }
           )}
 
           {/* 관련 정보 */}
-          {(news.launches.length > 0 || news.events.length > 0) && (
+          {('launches' in news && news.launches.length > 0) || ('events' in news && news.events.length > 0) ? (
             <div className="space-y-4 mb-8">
-              {news.launches.length > 0 && (
+              {'launches' in news && news.launches.length > 0 && (
                 <div>
                   <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
                     <Rocket className="w-5 h-5" />
@@ -207,7 +206,7 @@ export const NewsDetail = memo(function NewsDetail({ news, onExternalLinkClick }
                 </div>
               )}
 
-              {news.events.length > 0 && (
+              {'events' in news && news.events.length > 0 && (
                 <div>
                   <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
                     <Star className="w-5 h-5" />
@@ -228,7 +227,7 @@ export const NewsDetail = memo(function NewsDetail({ news, onExternalLinkClick }
                 </div>
               )}
             </div>
-          )}
+          ) : null}
 
           {/* 원문 링크 */}
           <div className="flex justify-center pt-6 border-t">

@@ -84,7 +84,7 @@ export function ArticleListFeature() {
               const searchParams = cleanSearchParams(search, page, limit);
               navigate({
                 to: `/articles/${article.id}`,
-                search: searchParams as never
+                search: searchParams as never,
               });
             }}
           >
