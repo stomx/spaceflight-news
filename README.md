@@ -1,4 +1,4 @@
-# Spaceflight News 포트폴리오
+# Spaceflight News
 
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/stomx/spaceflight-news/releases)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript)](https://www.typescriptlang.org/)
@@ -9,9 +9,9 @@
 
 > 🚀 **[라이브 데모 보기](https://your-demo-url.com)** | 📖 **[API 문서](https://api.spaceflightnewsapi.net/v4/docs)**
 
-이 프로젝트는 [Spaceflight News API](https://api.spaceflightnewsapi.net/v4/docs)를 활용하여 우주 비행 관련 최신 뉴스, 기사, 블로그, 이벤트 정보를 제공하는 포트폴리오 웹 애플리케이션입니다.
+이 프로젝트는 [Spaceflight News API](https://api.spaceflightnewsapi.net/v4/docs)를 활용하여 우주 비행 관련 최신 뉴스, 기사, 블로그, 이벤트 정보를 제공하는 웹 애플리케이션입니다.
 React, Vite, TypeScript, TailwindCSS, FSD(Feature-Sliced Design) 아키텍처를 기반으로 개발되었으며,
-실제 API 연동, 상태 관리, 컴포넌트 설계, 코드 품질 관리 등 실무 역량을 보여주기 위한 목적의 포트폴리오입니다.
+실제 API 연동, 상태 관리, 컴포넌트 설계, 코드 품질 관리 등 현대적인 웹 개발 기술들을 활용합니다.
 
 ## 📸 스크린샷
 
@@ -41,8 +41,8 @@ React, Vite, TypeScript, TailwindCSS, FSD(Feature-Sliced Design) 아키텍처를
 
 ```bash
 # 프로젝트 클론
-git clone https://github.com/your-username/portfolio-spaceflight-news.git
-cd portfolio-spaceflight-news
+git clone https://github.com/your-username/spaceflight-news.git
+cd spaceflight-news
 
 # 의존성 설치
 npm install
@@ -237,7 +237,7 @@ VITE_API_URL=https://api.spaceflightnewsapi.net/v4
 
 ## 👨‍💻 개발자 정보
 
-**Jaymon** - 포트폴리오 프로젝트  
+**Jaymon** - 개발자  
 📧 Email: stomx.work@kakao.com  
 🔗 LinkedIn: [stomx](https://www.linkedin.com/in/stomx/)
 
