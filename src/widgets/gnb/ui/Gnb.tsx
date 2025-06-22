@@ -58,8 +58,13 @@ export function Gnb() {
             exit={{ x: -20, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <Button size="icon" variant="ghost" onClick={handleBack} aria-label="목록으로" className="p-0 w-8 h-8">
-              <ArrowLeftIcon />
+            <Button 
+              variant="ghost" 
+              onClick={handleBack} 
+              className="flex items-center gap-2 px-3 py-2 h-auto text-sm"
+            >
+              <ArrowLeftIcon className="w-4 h-4" />
+              {isArticleDetail ? '기사 목록으로 돌아가기' : '블로그 목록으로 돌아가기'}
             </Button>
           </motion.div>
         )}
