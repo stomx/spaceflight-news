@@ -93,9 +93,10 @@ describe('createLazyComponent 함수', () => {
 describe('LoadingSkeleton Component', () => {
   describe('렌더링', () => {
     it('올바르게 렌더링된다', () => {
-      render(<LoadingSkeleton data-testid="loading-skeleton" />);
+      render(<LoadingSkeleton />);
       
-      const skeleton = screen.getByTestId('loading-skeleton');
+      // animate-pulse 클래스를 가진 메인 컨테이너 찾기
+      const skeleton = document.querySelector('.animate-pulse');
       expect(skeleton).toBeInTheDocument();
       expect(skeleton).toHaveClass('animate-pulse');
     });
@@ -104,12 +105,20 @@ describe('LoadingSkeleton Component', () => {
       render(<LoadingSkeleton />);
       
       // 메인 컨테이너
-      const container = screen.getByTestId('loading-skeleton') || document.querySelector('.animate-pulse');
+      const container = document.querySelector('.animate-pulse');
       expect(container).toBeInTheDocument();
       
       // 스켈레톤 요소들의 클래스 확인
       const bgElements = document.querySelectorAll('.bg-gray-200');
       expect(bgElements.length).toBeGreaterThan(0);
+      
+      // 첫 번째 스켈레톤 박스 (이미지 영역)
+      const imageBox = container?.querySelector('.bg-gray-200.rounded-md.w-full.h-48.mb-4');
+      expect(imageBox).toBeInTheDocument();
+      
+      // 텍스트 스켈레톤 컨테이너
+      const textContainer = container?.querySelector('.space-y-2');
+      expect(textContainer).toBeInTheDocument();
     });
   });
 });
@@ -117,9 +126,10 @@ describe('LoadingSkeleton Component', () => {
 describe('CardSkeleton Component', () => {
   describe('렌더링', () => {
     it('올바르게 렌더링된다', () => {
-      render(<CardSkeleton data-testid="card-skeleton" />);
+      render(<CardSkeleton />);
       
-      const skeleton = screen.getByTestId('card-skeleton');
+      // animate-pulse와 border 클래스를 가진 카드 컨테이너 찾기
+      const skeleton = document.querySelector('.animate-pulse.border.rounded-lg.p-4');
       expect(skeleton).toBeInTheDocument();
       expect(skeleton).toHaveClass('animate-pulse', 'border', 'rounded-lg', 'p-4');
     });
@@ -128,12 +138,20 @@ describe('CardSkeleton Component', () => {
       render(<CardSkeleton />);
       
       // 메인 컨테이너
-      const container = screen.getByTestId('card-skeleton') || document.querySelector('.animate-pulse.border.rounded-lg');
+      const container = document.querySelector('.animate-pulse.border.rounded-lg');
       expect(container).toBeInTheDocument();
       
       // 플렉스 컨테이너
-      const flexContainer = document.querySelector('.flex.gap-4');
+      const flexContainer = container?.querySelector('.flex.gap-4');
       expect(flexContainer).toBeInTheDocument();
+      
+      // 이미지 영역
+      const imageArea = flexContainer?.querySelector('.bg-gray-200.rounded-md.w-1\\/2.aspect-video');
+      expect(imageArea).toBeInTheDocument();
+      
+      // 텍스트 영역
+      const textArea = flexContainer?.querySelector('.flex-1.space-y-2');
+      expect(textArea).toBeInTheDocument();
     });
   });
 });
