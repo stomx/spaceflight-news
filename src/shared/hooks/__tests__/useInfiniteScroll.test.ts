@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useInfiniteScroll } from '../useInfiniteScroll';
 
@@ -101,7 +101,9 @@ describe('useInfiniteScroll', () => {
     });
 
     // 스크롤 이벤트 시뮬레이션
-    scrollHandler();
+    act(() => {
+      scrollHandler();
+    });
 
     await waitFor(() => {
       expect(mockQuery.fetchNextPage).toHaveBeenCalled();
@@ -224,8 +226,10 @@ describe('useInfiniteScroll', () => {
       value: 1100,
       writable: true,
     });
-
-    scrollHandler();
+    
+    act(() => {
+      scrollHandler();
+    });
 
     // fetchNextPage가 호출되면 isFetchingMore가 true가 되어야 함
     await waitFor(() => {
@@ -233,7 +237,9 @@ describe('useInfiniteScroll', () => {
     });
 
     // fetch 완료
-    resolveFetch({});
+    await act(async () => {
+      resolveFetch({});
+    });
 
     await waitFor(() => {
       expect(result.current.isFetchingMore).toBe(false);

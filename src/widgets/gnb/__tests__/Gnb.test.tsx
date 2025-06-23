@@ -3,21 +3,18 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Gnb } from '../ui/Gnb';
+import type * as React from 'react';
 
 // Mock dependencies
 vi.mock('framer-motion', () => ({
   motion: {
-    nav: ({ children, ...props }: any) => <nav {...props}>{children}</nav>,
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    nav: (props: React.ComponentProps<'nav'>) => <nav {...props} />,
+    div: (props: React.ComponentProps<'div'>) => <div {...props} />,
   },
 }));
 
 vi.mock('@tanstack/react-router', () => ({
-  Link: ({ children, to, ...props }: any) => (
-    <a href={to} {...props}>
-      {children}
-    </a>
-  ),
+  Link: ({ to, ...props }: React.ComponentProps<'a'> & { to: string }) => <a href={to} {...props} />,
   useMatchRoute: vi.fn(),
   useNavigate: vi.fn(),
   useSearch: vi.fn(),
@@ -28,11 +25,12 @@ vi.mock('@heroicons/react/24/outline', () => ({
 }));
 
 vi.mock('@/shared/components/button', () => ({
-  Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
+  Button: ({ asChild, ...props }: React.ComponentProps<'button'> & { asChild?: boolean }) => {
+    if (asChild) {
+      return props.children;
+    }
+    return <button {...props} />;
+  },
 }));
 
 vi.mock('@/shared/lib/utils', () => ({
@@ -87,7 +85,7 @@ describe('Gnb Component', () => {
 
   describe('상세 페이지 상태', () => {
     it('기사 상세 페이지에서 뒤로가기 버튼을 표시한다', () => {
-      mockMatchRoute.mockImplementation((options: any) => {
+      mockMatchRoute.mockImplementation((options: { to: string }) => {
         return options.to === '/articles/$articleId';
       });
 
@@ -98,7 +96,7 @@ describe('Gnb Component', () => {
     });
 
     it('블로그 상세 페이지에서 뒤로가기 버튼을 표시한다', () => {
-      mockMatchRoute.mockImplementation((options: any) => {
+      mockMatchRoute.mockImplementation((options: { to: string }) => {
         return options.to === '/blogs/$blogId';
       });
 
@@ -109,7 +107,7 @@ describe('Gnb Component', () => {
     });
 
     it('보고서 상세 페이지에서 뒤로가기 버튼을 표시한다', () => {
-      mockMatchRoute.mockImplementation((options: any) => {
+      mockMatchRoute.mockImplementation((options: { to: string }) => {
         return options.to === '/reports/$reportId';
       });
 
@@ -124,7 +122,7 @@ describe('Gnb Component', () => {
     it('기사 상세에서 뒤로가기 클릭 시 기사 목록으로 이동한다', async () => {
       const user = userEvent.setup();
 
-      mockMatchRoute.mockImplementation((options: any) => {
+      mockMatchRoute.mockImplementation((options: { to: string }) => {
         return options.to === '/articles/$articleId';
       });
 
@@ -142,7 +140,7 @@ describe('Gnb Component', () => {
     it('블로그 상세에서 뒤로가기 클릭 시 블로그 목록으로 이동한다', async () => {
       const user = userEvent.setup();
 
-      mockMatchRoute.mockImplementation((options: any) => {
+      mockMatchRoute.mockImplementation((options: { to: string }) => {
         return options.to === '/blogs/$blogId';
       });
 
@@ -160,7 +158,7 @@ describe('Gnb Component', () => {
     it('보고서 상세에서 뒤로가기 클릭 시 보고서 목록으로 이동한다', async () => {
       const user = userEvent.setup();
 
-      mockMatchRoute.mockImplementation((options: any) => {
+      mockMatchRoute.mockImplementation((options: { to: string }) => {
         return options.to === '/reports/$reportId';
       });
 
@@ -186,7 +184,7 @@ describe('Gnb Component', () => {
         category: 'tech',
       });
 
-      mockMatchRoute.mockImplementation((options: any) => {
+      mockMatchRoute.mockImplementation((options: { to: string }) => {
         return options.to === '/articles/$articleId';
       });
 

@@ -1,18 +1,34 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { ArticleDetailFeature } from '../index';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { Article } from '@/shared/types/news';
 
 // Mock dependencies
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    button: ({ children, onClick, ...props }: any) => (
-      <button onClick={onClick} {...props}>
-        {children}
-      </button>
-    ),
-  },
-}));
+vi.mock('framer-motion', async () => {
+  const React = await import('react');
+  const original = await import('framer-motion');
+
+  const MockComponent = React.forwardRef(
+    // biome-ignore lint/suspicious/noExplicitAny: 테스트 모킹에 any 필요
+    ({ children, ...props }: any, ref) => {
+      const { whileHover, whileTap, ...rest } = props;
+      return React.createElement('div', { ...rest, ref }, children);
+    },
+  );
+
+  return {
+    ...original,
+    motion: new Proxy(original.motion, {
+      get: (target, key) => {
+        if (typeof target[key as keyof typeof target] === 'function') {
+          return MockComponent;
+        }
+        return target[key as keyof typeof target];
+      },
+    }),
+  };
+});
 
 vi.mock('lucide-react', () => ({
   ArrowLeft: () => <span data-testid="arrow-left-icon">←</span>,
@@ -24,12 +40,18 @@ vi.mock('@/shared/hooks/useNewsQuery', () => ({
 }));
 
 vi.mock('@/entities/news/components/NewsDetail', () => ({
-  NewsDetail: ({ news, onExternalLinkClick }: any) => (
+  NewsDetail: ({
+    news,
+    onExternalLinkClick,
+  }: {
+    news: Article;
+    onExternalLinkClick: (url:string) => void;
+  }) => (
     <div data-testid="news-detail">
       <h1>{news.title}</h1>
       <p>{news.summary}</p>
-      <button onClick={() => onExternalLinkClick('https://example.com')}>
-        External Link
+      <button onClick={() => onExternalLinkClick(news.url)} data-testid="external-link-button">
+        원문 보기
       </button>
     </div>
   ),
@@ -70,7 +92,7 @@ describe('ArticleDetailFeature', () => {
         isPending: true,
         isSuccess: false,
         status: 'pending' as const,
-      } as any);
+      } as UseQueryResult<Article, Error>);
 
       render(<ArticleDetailFeature articleId={articleId} />);
 
@@ -89,7 +111,7 @@ describe('ArticleDetailFeature', () => {
         isPending: false,
         isSuccess: false,
         status: 'error' as const,
-      } as any);
+      } as UseQueryResult<Article, Error>);
 
       render(<ArticleDetailFeature articleId={articleId} />);
 
@@ -108,7 +130,7 @@ describe('ArticleDetailFeature', () => {
         isPending: false,
         isSuccess: false,
         status: 'error' as const,
-      } as any);
+      } as UseQueryResult<Article, Error>);
 
       render(<ArticleDetailFeature articleId={articleId} />);
 
@@ -127,7 +149,7 @@ describe('ArticleDetailFeature', () => {
         isPending: false,
         isSuccess: false,
         status: 'error' as const,
-      } as any);
+      } as UseQueryResult<Article, Error>);
 
       render(<ArticleDetailFeature articleId={articleId} />);
 
@@ -148,7 +170,7 @@ describe('ArticleDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Article | null, Error>);
 
       render(<ArticleDetailFeature articleId={articleId} />);
 
@@ -165,7 +187,7 @@ describe('ArticleDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Article | null, Error>);
 
       render(<ArticleDetailFeature articleId={articleId} />);
 
@@ -199,7 +221,7 @@ describe('ArticleDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Article, Error>);
 
       render(<ArticleDetailFeature articleId={articleId} />);
 
@@ -217,15 +239,15 @@ describe('ArticleDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Article, Error>);
 
       render(<ArticleDetailFeature articleId={articleId} />);
 
-      const externalLinkButton = screen.getByText('External Link');
+      const externalLinkButton = screen.getByText('원문 보기');
       fireEvent.click(externalLinkButton);
 
       expect(mockWindowOpen).toHaveBeenCalledWith(
-        'https://example.com',
+        'https://example.com/article',
         '_blank',
         'noopener,noreferrer'
       );
@@ -242,7 +264,7 @@ describe('ArticleDetailFeature', () => {
         isPending: true,
         isSuccess: false,
         status: 'pending' as const,
-      } as any);
+      } as UseQueryResult<Article, Error>);
 
       render(<ArticleDetailFeature articleId="456" />);
 
@@ -273,7 +295,7 @@ describe('ArticleDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Article, Error>);
 
       const { container } = render(<ArticleDetailFeature articleId={articleId} />);
 

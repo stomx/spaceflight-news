@@ -1,0 +1,27 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Task Execution and File Management Workflow
+
+This document outlines the mandatory process for all development work.
+
+## 1. Task Workflow
+
+For any given task parsed from `tasks/tasks.md`:
+
+1.  **Confirm Alignment**: Validate that the task requirements align with the architecture in `docs/architecture.mermaid` and technical specs in `docs/technical.md`.
+2.  **Update Status**: Before implementation, update `docs/status.md` to mark the task as "In Progress".
+3.  **Implement**: Write code following the standards in `codingStandards.mdc`.
+4.  **Verify Changes**: After implementation, follow the "On File Change" protocol below.
+5.  **Final Update**: Once the task is complete (including all verification), update `tasks/tasks.md` and `docs/status.md` to reflect the completion.
+
+## 2. On File Change Protocol
+
+After ANY code change, the following actions are required:
+
+1.  **READ `docs/architecture.mermaid`**: Verify that the changes are compliant with the established architecture. Verbally confirm this.
+2.  **VALIDATE against `docs/technical.md`**: Ensure the changes adhere to all technical specifications and patterns.
+3.  **UPDATE `docs/status.md`**: Document the latest progress, any new issues encountered, and a summary of the changes made.
+4.  **VERIFY against `tasks/tasks.md`**: Check that the changes contribute to the progress of the current task's acceptance criteria.

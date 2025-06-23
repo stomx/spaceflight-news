@@ -1,4 +1,4 @@
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect } from 'vitest';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../tooltip';
@@ -49,19 +49,16 @@ describe('Tooltip Component', () => {
 
       const trigger = screen.getByTestId('trigger');
 
-      await act(async () => {
-        await user.hover(trigger);
-        // 애니메이션 및 렌더링을 위해 잠시 기다림
-        await new Promise(resolve => setTimeout(resolve, 100));
-      });
+      await user.hover(trigger);
 
       await waitFor(() => {
         const tooltips = screen.getAllByText('호버 툴팁');
         expect(tooltips[0]).toBeInTheDocument();
-      }, { timeout: 2000 });
+      });
     });
 
     it('포커스시 툴팁이 나타나고 블러시 사라진다', async () => {
+      const user = userEvent.setup();
       render(
         <TooltipProvider delayDuration={0}>
           <Tooltip>
@@ -71,27 +68,21 @@ describe('Tooltip Component', () => {
         </TooltipProvider>
       );
 
-      const trigger = screen.getByTestId('trigger');
-
-      // 포커스로 툴팁 표시
-      await act(async () => {
-        trigger.focus();
-        await new Promise(resolve => setTimeout(resolve, 100));
-      });
+      // userEvent.tab()을 사용하여 포커스를 시뮬레이션합니다.
+      await user.tab();
 
       await waitFor(() => {
-        const tooltips = screen.getAllByText('포커스 툴팁');
-        expect(tooltips[0]).toBeInTheDocument();
-      }, { timeout: 2000 });
-
-      // 블러로 툴팁 숨김 - 이 부분은 더 안정적으로 작동
-      await act(async () => {
-        trigger.blur();
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // getByText 대신 getByRole을 사용하여 정확한 툴팁 요소를 찾습니다.
+        expect(screen.getByRole('tooltip')).toBeInTheDocument();
+        expect(screen.getByRole('tooltip')).toHaveTextContent('포커스 툴팁');
       });
 
-      // 상태 변화만 확인 (완전한 제거는 확인하지 않음)
-      expect(trigger).not.toHaveFocus();
+      // 다시 tab()을 호출하여 포커스를 다른 곳으로 이동시켜 블러 효과를 냅니다.
+      await user.tab();
+
+      await waitFor(() => {
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+      });
     });
   });
 
@@ -110,17 +101,14 @@ describe('Tooltip Component', () => {
 
       const trigger = screen.getByTestId('trigger');
 
-      await act(async () => {
-        await user.hover(trigger);
-        await new Promise(resolve => setTimeout(resolve, 100));
-      });
+      await user.hover(trigger);
 
       await waitFor(() => {
         // role="tooltip"을 가진 요소 찾기
         const tooltip = screen.getByRole('tooltip');
         expect(tooltip).toBeInTheDocument();
         expect(tooltip).toHaveTextContent('접근성 툴팁');
-      }, { timeout: 2000 });
+      });
     });
   });
 
@@ -144,17 +132,14 @@ describe('Tooltip Component', () => {
 
       const trigger = screen.getByTestId('trigger');
 
-      await act(async () => {
-        await user.hover(trigger);
-        await new Promise(resolve => setTimeout(resolve, 100));
-      });
+      await user.hover(trigger);
 
       await waitFor(() => {
         const titles = screen.getAllByText('제목');
         const descriptions = screen.getAllByText('상세 설명이 여기에 표시됩니다.');
         expect(titles[0]).toBeInTheDocument();
         expect(descriptions[0]).toBeInTheDocument();
-      }, { timeout: 2000 });
+      });
     });
 
     it('텍스트만 포함하는 간단한 툴팁', async () => {
@@ -171,15 +156,12 @@ describe('Tooltip Component', () => {
 
       const trigger = screen.getByTestId('trigger');
 
-      await act(async () => {
-        await user.hover(trigger);
-        await new Promise(resolve => setTimeout(resolve, 100));
-      });
+      await user.hover(trigger);
 
       await waitFor(() => {
         const tooltips = screen.getAllByText('간단한 설명');
         expect(tooltips[0]).toBeInTheDocument();
-      }, { timeout: 2000 });
+      });
     });
   });
 
@@ -198,16 +180,13 @@ describe('Tooltip Component', () => {
 
       const trigger = screen.getByTestId('trigger');
 
-      await act(async () => {
-        await user.hover(trigger);
-        await new Promise(resolve => setTimeout(resolve, 100));
-      });
+      await user.hover(trigger);
 
       await waitFor(() => {
         const tooltips = screen.getAllByText('커스텀 툴팁');
         const tooltip = tooltips[0].closest('[data-slot="tooltip-content"]');
         expect(tooltip).toHaveClass('custom-tooltip');
-      }, { timeout: 2000 });
+      });
     });
 
     it('sideOffset이 적용된다', async () => {
@@ -224,15 +203,12 @@ describe('Tooltip Component', () => {
 
       const trigger = screen.getByTestId('trigger');
 
-      await act(async () => {
-        await user.hover(trigger);
-        await new Promise(resolve => setTimeout(resolve, 100));
-      });
+      await user.hover(trigger);
 
       await waitFor(() => {
         const tooltips = screen.getAllByText('오프셋 툴팁');
         expect(tooltips[0]).toBeInTheDocument();
-      }, { timeout: 2000 });
+      });
     });
   });
 });

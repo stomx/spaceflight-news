@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { Suspense } from 'react';
+import { ErrorBoundary } from '../error-boundary';
 import { createLazyComponent, LoadingSkeleton, CardSkeleton } from '../lazy-wrapper';
 
 // 테스트용 컴포넌트들
@@ -215,20 +216,28 @@ describe('통합 사용 시나리오', () => {
 
   describe('에러 처리', () => {
     it('로딩 실패 시 에러를 처리한다', async () => {
-      const LazyFailComponent = createLazyComponent(() =>
-        Promise.reject(new Error('Loading failed'))
+      // Vitest가 콘솔에 에러를 출력하는 것을 막기 위해 mock 처리
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const LazyFailComponent = createLazyComponent<Record<string, never>>(() =>
+        Promise.reject(new Error('Loading failed')),
       );
 
-      // 에러 바운더리 없이는 에러가 발생할 수 있음
-      // 실제 사용 시에는 ErrorBoundary로 감싸야 함
-      const { container } = render(
-        <Suspense fallback={<div>Loading...</div>}>
-          <LazyFailComponent />
-        </Suspense>
+      render(
+        <ErrorBoundary fallback={<div>에러 발생!</div>}>
+          <Suspense fallback={<div>Loading...</div>}>
+            <LazyFailComponent />
+          </Suspense>
+        </ErrorBoundary>,
       );
 
-      // 로딩 상태는 확인할 수 있음
-      expect(screen.getByText('Loading...')).toBeInTheDocument();
+      // Promise가 reject되고 ErrorBoundary가 에러를 잡을 때까지 기다립니다.
+      await waitFor(() => {
+        expect(screen.getByText('에러 발생!')).toBeInTheDocument();
+      });
+
+      // mock 복원
+      vi.restoreAllMocks();
     });
   });
 

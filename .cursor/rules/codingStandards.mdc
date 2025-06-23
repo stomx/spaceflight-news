@@ -1,0 +1,53 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Unified Coding Standards
+
+This document is the single source of truth for all development standards.
+
+## 1. Architecture
+
+- **Feature-Sliced Design (FSD)**: Strictly follow the FSD methodology ([https://feature-sliced.design/](mdc:https:/feature-sliced.design)).
+  - **Layer Import Rules**: Higher layers can import from lower layers, but not vice-versa. No cross-importing within the same layer.
+  - **Architectural Compliance**: All changes must be validated against `docs/architecture.mermaid`. If a violation is detected, you must warn the user and propose a compliant solution.
+  - **Public API**: Slices must expose a clear public API via `index.ts`.
+- **UI Component Pattern**: Use **Atomic Design** ([https://atomicdesign.bradfrost.com/](mdc:https:/atomicdesign.bradfrost.com)) principles for UI components in the `shared/ui` layer.
+
+## 2. Code Style and Quality
+
+- **Language**: All code and comments must be in Korean.
+- **Formatting**: Adhere to the project's Biome configuration. Run `pnpm biome-fix` and `pnpm biome-ci` before committing.
+- **Naming**: `camelCase` for variables/functions, `PascalCase` for types/components.
+- **Typing**: Use strict TypeScript. Avoid `any`. Validate inputs against business rules.
+- **Principles**: Adhere to SOLID principles.
+- **Documentation**: Write JSDoc comments for all public methods.
+
+## 3. Testing
+
+- **Frameworks**: Vitest and React Testing Library.
+- **Approach**: A Test-Driven Development (TDD) approach is highly encouraged.
+- **Coverage**: Test core business logic, validation schemas, and custom hooks. Tests must cover success cases, error conditions, and edge cases.
+- **Pre-Commit Check**: All `pnpm build-check` tests must pass before committing.
+
+## 4. Commit Messages
+
+- **Standard**: Follow the **Conventional Commits** specification.
+- **Format**: `<type>(<scope>): <subject>`
+- **Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
+
+## 5. API Usage
+
+- **Client**: Use the Orval-generated API client. Run `pnpm generate` after `api-spec.json` changes.
+- **Data Fetching**: Use TanStack Query (`useQuery`, `useMutation`).
+
+## 6. Markdown Style Guide
+
+- All markdown files (`.md`) must also adhere to the project's formatting standards.
+- This includes, but is not limited to, the line width limit of 80 characters.
+- Ensure all markdown files are formatted correctly before committing.
+- To prevent common `markdownlint` errors, please adhere to the following:
+  - `MD022`: Always leave a blank line before and after headings.
+  - `MD032`: Always leave a blank line before and after lists.
+  - `MD007`: Use a 2-space indentation for nested list items.

@@ -12,8 +12,8 @@ export const DEFAULT_LIMIT = 3;
 /**
  * 환경 검증 함수
  */
-export function validateEnvironment() {
-  if (!API_URL) {
+export function validateEnvironment(url = API_URL) {
+  if (!url) {
     throw new Error('API_URL이 설정되지 않았습니다.');
   }
 }

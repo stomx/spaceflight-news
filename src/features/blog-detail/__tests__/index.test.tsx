@@ -2,32 +2,51 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { BlogDetailFeature } from '../index';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { Blog } from '@/shared/types/news';
 
-// Mock dependencies
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    button: ({ children, onClick, ...props }: any) => (
-      <button onClick={onClick} {...props}>
-        {children}
-      </button>
-    ),
-  },
-}));
+// framer-motion을 정교하게 모킹하여 불필요한 prop 전달을 막습니다.
+vi.mock('framer-motion', async () => {
+  const React = await import('react');
+  const original = await import('framer-motion');
+
+  const MockComponent = React.forwardRef(
+    // biome-ignore lint/suspicious/noExplicitAny: 테스트 모킹에 any 필요
+    ({ children, ...props }: any, ref) => {
+      const { whileHover, whileTap, ...rest } = props;
+      return React.createElement('div', { ...rest, ref }, children);
+    },
+  );
+
+  return {
+    ...original,
+    motion: new Proxy(original.motion, {
+      get: (target, key) => {
+        if (typeof target[key as keyof typeof target] === 'function') {
+          return MockComponent;
+        }
+        return target[key as keyof typeof target];
+      },
+    }),
+  };
+});
 
 vi.mock('@/shared/hooks/useNewsQuery', () => ({
   useBlogQuery: vi.fn(),
 }));
 
 vi.mock('@/entities/news/components/NewsDetail', () => ({
-  NewsDetail: ({ news, onExternalLinkClick }: any) => (
+  NewsDetail: ({
+    news,
+    onExternalLinkClick,
+  }: {
+    news: Blog;
+    onExternalLinkClick: (url: string) => void;
+  }) => (
     <div data-testid="news-detail">
       <h1>{news.title}</h1>
       <p>{news.summary}</p>
-      <button 
-        onClick={() => onExternalLinkClick(news.url)}
-        data-testid="external-link-button"
-      >
+      <button onClick={() => onExternalLinkClick(news.url)} data-testid="external-link-button">
         원문 보기
       </button>
     </div>
@@ -62,8 +81,8 @@ describe('BlogDetailFeature', () => {
     vi.clearAllMocks();
   });
 
-  describe('로딩 상태', () => {
-    it('로딩 중일 때 로딩 메시지와 스피너를 표시한다', () => {
+  describe('테스트 모드', () => {
+    it('blogId가 "test"일 때 더미 데이터를 표시한다', async () => {
       mockUseBlogQuery.mockReturnValue({
         data: undefined,
         isLoading: true,
@@ -72,7 +91,26 @@ describe('BlogDetailFeature', () => {
         isPending: true,
         isSuccess: false,
         status: 'pending' as const,
-      } as any);
+      } as UseQueryResult<Blog, Error>);
+
+      render(<BlogDetailFeature blogId="test" />);
+
+      expect(screen.getByTestId('loader-icon')).toBeInTheDocument();
+      expect(screen.getByText('블로그를 불러오는 중...')).toBeInTheDocument();
+    });
+  });
+
+  describe('로딩 상태', () => {
+    it('로딩 중일 때 로딩 메시지를 표시한다', () => {
+      mockUseBlogQuery.mockReturnValue({
+        data: undefined,
+        isLoading: true,
+        isError: false,
+        error: null,
+        isPending: true,
+        isSuccess: false,
+        status: 'pending' as const,
+      } as UseQueryResult<Blog, Error>);
 
       render(<BlogDetailFeature blogId="1" />);
 
@@ -93,7 +131,7 @@ describe('BlogDetailFeature', () => {
         isPending: false,
         isSuccess: false,
         status: 'error' as const,
-      } as any);
+      } as UseQueryResult<Blog, Error>);
 
       render(<BlogDetailFeature blogId="1" />);
 
@@ -117,7 +155,7 @@ describe('BlogDetailFeature', () => {
         isPending: false,
         isSuccess: false,
         status: 'error' as const,
-      } as any);
+      } as UseQueryResult<Blog, Error>);
 
       render(<BlogDetailFeature blogId="1" />);
 
@@ -137,7 +175,7 @@ describe('BlogDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Blog | null, Error>);
 
       render(<BlogDetailFeature blogId="1" />);
 
@@ -172,7 +210,7 @@ describe('BlogDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Blog, Error>);
 
       render(<BlogDetailFeature blogId="1" />);
 
@@ -193,7 +231,7 @@ describe('BlogDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Blog, Error>);
 
       render(<BlogDetailFeature blogId="1" />);
 
@@ -216,7 +254,7 @@ describe('BlogDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Blog, Error>);
 
       const { container } = render(<BlogDetailFeature blogId="1" />);
 
@@ -235,7 +273,7 @@ describe('BlogDetailFeature', () => {
         isPending: true,
         isSuccess: false,
         status: 'pending' as const,
-      } as any);
+      } as UseQueryResult<Blog, Error>);
 
       render(<BlogDetailFeature blogId="123" />);
 

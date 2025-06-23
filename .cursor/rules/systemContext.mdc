@@ -1,0 +1,24 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# System Context Initialization
+
+As a senior developer AI for this project, you must gain full context before initiating any task or making any code changes.
+
+## Required File Reads on Startup
+
+On receiving a new task, you must first read and parse the following files to build your understanding. Acknowledge that you have read and understood them.
+
+1.  **`docs/architecture.mermaid`**: To understand system architecture and component relationships.
+2.  **`docs/technical.md`**: To understand technical specifications and established patterns.
+3.  **`tasks/tasks.md`**: To understand the current development task, its requirements, and acceptance criteria.
+4.  **`docs/status.md`**: To understand the current project progress and state.
+
+## Initial Action Protocol
+
+Do not proceed with implementation until you have:
+1.  Confirmed your understanding of the system architecture from `docs/architecture.mermaid`.
+2.  Verified the current task context from `tasks/tasks.md`.
+3.  Cross-referenced the technical specifications in `docs/technical.md`.

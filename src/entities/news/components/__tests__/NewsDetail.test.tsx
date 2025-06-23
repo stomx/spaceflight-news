@@ -3,50 +3,10 @@ import { describe, it, expect, vi } from 'vitest';
 import { NewsDetail } from '../NewsDetail';
 import type { Article, Blog, Report } from '@/shared/types/news';
 
-// Test if the component imports correctly
-describe('NewsDetail Component Import', () => {
-  it('should import correctly', () => {
-    expect(NewsDetail).toBeDefined();
-    expect(typeof NewsDetail).toBe('object'); // memo returns an object
-  });
-});
-
-// Mock framer-motion
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: any) => {
-      const { whileHover, whileTap, initial, animate, transition, ...cleanProps } = props;
-      return <div {...cleanProps}>{children}</div>;
-    },
-    a: ({ children, ...props }: any) => {
-      const { whileHover, whileTap, initial, animate, transition, ...cleanProps } = props;
-      return <a {...cleanProps}>{children}</a>;
-    },
-    button: ({ children, ...props }: any) => {
-      const { whileHover, whileTap, initial, animate, transition, ...cleanProps } = props;
-      return <button {...cleanProps}>{children}</button>;
-    },
-  },
-}));
-
 // Mock LazyImage component
 vi.mock('@/shared/components/lazy-image', () => ({
-  LazyImage: ({ src, alt, className }: any) => (
+  LazyImage: ({ src, alt, className }: { src: string; alt: string; className?: string }) => (
     <img src={src} alt={alt} className={className} />
-  ),
-}));
-
-// Mock Badge component
-vi.mock('@/shared/components/badge', () => ({
-  Badge: ({ children, variant, className }: any) => (
-    <span className={`badge ${variant} ${className}`}>{children}</span>
-  ),
-}));
-
-// Mock Card component
-vi.mock('@/shared/components/card', () => ({
-  Card: ({ children, className }: any) => (
-    <div className={`card ${className}`}>{children}</div>
   ),
 }));
 
@@ -211,6 +171,30 @@ describe('NewsDetail Component', () => {
       expect(linkedinLink).toBeInTheDocument();
       expect(twitterLink).toHaveAttribute('href', 'https://twitter.com/johndoe');
       expect(linkedinLink).toHaveAttribute('href', 'https://linkedin.com/in/johndoe');
+    });
+
+    it('모든 소셜 링크가 올바르게 표시된다', () => {
+      const allSocialsAuthor = {
+        name: 'Social Butterfly',
+        socials: {
+          x: 'https://twitter.com/social',
+          linkedin: 'https://linkedin.com/in/social',
+          mastodon: 'https://mastodon.social/@social',
+          bluesky: 'https://bsky.app/profile/social.bsky.social',
+          youtube: 'https://youtube.com/c/social',
+          instagram: 'https://instagram.com/social',
+        },
+      };
+      const newsWithAllSocials = { ...mockArticle, authors: [allSocialsAuthor] };
+
+      render(<NewsDetail news={newsWithAllSocials} />);
+
+      expect(screen.getByRole('link', { name: 'X' })).toHaveAttribute('href', allSocialsAuthor.socials.x);
+      expect(screen.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute('href', allSocialsAuthor.socials.linkedin);
+      expect(screen.getByRole('link', { name: 'Mastodon' })).toHaveAttribute('href', allSocialsAuthor.socials.mastodon);
+      expect(screen.getByRole('link', { name: 'Bluesky' })).toHaveAttribute('href', allSocialsAuthor.socials.bluesky);
+      expect(screen.getByRole('link', { name: 'YouTube' })).toHaveAttribute('href', allSocialsAuthor.socials.youtube);
+      expect(screen.getByRole('link', { name: 'Instagram' })).toHaveAttribute('href', allSocialsAuthor.socials.instagram);
     });
 
     it('작성자가 없는 경우 작성자 섹션이 표시되지 않는다', () => {

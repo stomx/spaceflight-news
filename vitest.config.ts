@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react';
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
@@ -20,6 +20,17 @@ export default defineConfig({
         '**/*.test.{ts,tsx}',
         '**/*.spec.{ts,tsx}',
         'src/routeTree.gen.ts',
+        'public/',
+        'docs/',
+        'coverage/',
+        '.*rc.cjs',
+        '*.config.{js,ts}',
+        '**/*.test.new.tsx',
+        'src/main.tsx',
+        'src/app/**',
+        'src/pages/**',
+        'src/shared/types/**',
+        'components.json',
       ],
     },
   },

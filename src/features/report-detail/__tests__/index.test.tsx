@@ -2,32 +2,51 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { ReportDetailFeature } from '../index';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { Report } from '@/shared/types/news';
 
-// Mock dependencies
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    button: ({ children, onClick, ...props }: any) => (
-      <button onClick={onClick} {...props}>
-        {children}
-      </button>
-    ),
-  },
-}));
+// framer-motion을 정교하게 모킹하여 불필요한 prop 전달을 막습니다.
+vi.mock('framer-motion', async () => {
+  const React = await import('react');
+  const original = await import('framer-motion');
+
+  const MockComponent = React.forwardRef(
+    // biome-ignore lint/suspicious/noExplicitAny: 테스트 모킹에 any 필요
+    ({ children, ...props }: any, ref) => {
+      const { whileHover, whileTap, ...rest } = props;
+      return React.createElement('div', { ...rest, ref }, children);
+    },
+  );
+
+  return {
+    ...original,
+    motion: new Proxy(original.motion, {
+      get: (target, key) => {
+        if (typeof target[key as keyof typeof target] === 'function') {
+          return MockComponent;
+        }
+        return target[key as keyof typeof target];
+      },
+    }),
+  };
+});
 
 vi.mock('@/shared/hooks/useNewsQuery', () => ({
   useReportQuery: vi.fn(),
 }));
 
 vi.mock('@/entities/news/components/NewsDetail', () => ({
-  NewsDetail: ({ news, onExternalLinkClick }: any) => (
+  NewsDetail: ({
+    news,
+    onExternalLinkClick,
+  }: {
+    news: Report;
+    onExternalLinkClick: (url: string) => void;
+  }) => (
     <div data-testid="news-detail">
       <h1>{news.title}</h1>
       <p>{news.summary}</p>
-      <button 
-        onClick={() => onExternalLinkClick(news.url)}
-        data-testid="external-link-button"
-      >
+      <button onClick={() => onExternalLinkClick(news.url)} data-testid="external-link-button">
         원문 보기
       </button>
     </div>
@@ -75,7 +94,7 @@ describe('ReportDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Report, Error>);
       
       render(<ReportDetailFeature reportId="test" />);
 
@@ -106,7 +125,7 @@ describe('ReportDetailFeature', () => {
         isPending: true,
         isSuccess: false,
         status: 'pending' as const,
-      } as any);
+      } as UseQueryResult<Report, Error>);
 
       render(<ReportDetailFeature reportId="1" />);
 
@@ -127,7 +146,7 @@ describe('ReportDetailFeature', () => {
         isPending: false,
         isSuccess: false,
         status: 'error' as const,
-      } as any);
+      } as UseQueryResult<Report, Error>);
 
       render(<ReportDetailFeature reportId="1" />);
 
@@ -152,7 +171,7 @@ describe('ReportDetailFeature', () => {
         isPending: false,
         isSuccess: false,
         status: 'error' as const,
-      } as any);
+      } as UseQueryResult<Report, Error>);
 
       render(<ReportDetailFeature reportId="1" />);
 
@@ -172,7 +191,7 @@ describe('ReportDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Report | null, Error>);
 
       render(<ReportDetailFeature reportId="1" />);
 
@@ -187,7 +206,7 @@ describe('ReportDetailFeature', () => {
   });
 
   describe('성공 상태', () => {
-    const mockReport = {
+    const mockReport: Report = {
       id: 1,
       title: '테스트 보고서',
       summary: '테스트 보고서 요약',
@@ -209,7 +228,7 @@ describe('ReportDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Report, Error>);
 
       render(<ReportDetailFeature reportId="1" />);
 
@@ -230,7 +249,7 @@ describe('ReportDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Report, Error>);
 
       render(<ReportDetailFeature reportId="1" />);
 
@@ -253,7 +272,7 @@ describe('ReportDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Report, Error>);
 
       const { container } = render(<ReportDetailFeature reportId="1" />);
 
@@ -272,7 +291,7 @@ describe('ReportDetailFeature', () => {
         isPending: true,
         isSuccess: false,
         status: 'pending' as const,
-      } as any);
+      } as UseQueryResult<Report, Error>);
 
       render(<ReportDetailFeature reportId="123" />);
 
@@ -288,7 +307,7 @@ describe('ReportDetailFeature', () => {
         isPending: false,
         isSuccess: true,
         status: 'success' as const,
-      } as any);
+      } as UseQueryResult<Report, Error>);
 
       render(<ReportDetailFeature reportId="test" />);
 

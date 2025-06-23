@@ -94,4 +94,22 @@ describe('useErrorHandler', () => {
     expect(result.current.isError).toBe(false);
     expect(result.current.error).toBeNull();
   });
+
+  it('개발 환경에서는 에러를 콘솔에 출력해야 한다', () => {
+    const originalEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'development';
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const { result } = renderHook(() => useErrorHandler());
+    const testError = new Error('개발 모드 에러');
+
+    act(() => {
+      result.current.handleError(testError);
+    });
+
+    expect(consoleSpy).toHaveBeenCalledWith('Error handled:', testError);
+
+    consoleSpy.mockRestore();
+    process.env.NODE_ENV = originalEnv;
+  });
 });

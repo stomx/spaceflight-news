@@ -1,6 +1,6 @@
 import * as getPaginatedListModule from '@/shared/api/getPaginatedList';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { renderHook } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useNewsListModel } from '../useNewsListModel';
@@ -96,7 +96,7 @@ describe('useNewsListModel', () => {
     const { result } = renderHook(() => useNewsListModel('articles'), { wrapper: createWrapper() });
 
     // Wait for query to complete
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(result.current.totalPages).toBe(10); // Math.ceil(95 / 10)
     });
   });
@@ -139,7 +139,7 @@ describe('useNewsListModel', () => {
     expect(result.current.offset).toBe(5); // (2-1) * 5
 
     // Verify correct resource is called
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(mockGetPaginatedList).toHaveBeenCalledWith('blogs', { limit: 5, offset: 5 });
     });
   });
@@ -158,7 +158,7 @@ describe('useNewsListModel', () => {
 
     const { result } = renderHook(() => useNewsListModel('articles'), { wrapper: createWrapper() });
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(result.current.data).toEqual(mockResponse);
     });
 
@@ -183,7 +183,7 @@ describe('useNewsListModel', () => {
 
     const { result } = renderHook(() => useNewsListModel('articles'), { wrapper: createWrapper() });
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(result.current.totalPages).toBe(0); // Math.ceil(0 / 10)
     });
   });
@@ -206,7 +206,7 @@ describe('useNewsListModel', () => {
     expect(result.current.limit).toBe(25);
     expect(result.current.offset).toBe(2475); // (100-1) * 25
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(result.current.totalPages).toBe(40); // Math.ceil(1000 / 25)
     });
   });

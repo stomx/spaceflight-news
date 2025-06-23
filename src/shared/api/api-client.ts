@@ -40,12 +40,14 @@ export class ApiClient {
     this.instance.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.response?.status === 401) {
-          // 인증 만료 시 사용자에게 명확한 메시지 제공
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
           if (typeof window !== 'undefined') {
             localStorage.removeItem('accessToken');
           }
-          return Promise.reject(new Error('인증이 만료되었습니다. 다시 로그인해주세요.'));
+          // 재사용 가능한 에러 객체 생성
+          const authError = new Error('인증이 만료되었습니다. 다시 로그인해주세요.');
+          authError.name = 'AuthError';
+          return Promise.reject(authError);
         }
         return Promise.reject(error);
       },
@@ -106,10 +108,10 @@ export class ApiClient {
   /**
    * DELETE 요청
    */
-  public async delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
+  public async delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T | undefined> {
     try {
       const response: AxiosResponse<T> = await this.instance.delete(url, config);
-      return response.data;
+      return response.data === '' ? undefined : response.data;
     } catch (error) {
       this.handleError(error);
     }
@@ -120,9 +122,21 @@ export class ApiClient {
    */
   private handleError(error: unknown): never {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || error.message);
+      // 401 에러는 인터셉터에서 이미 처리되었으므로, 여기서는 그 외의 axios 에러를 처리합니다.
+      if (!error.response) {
+        // 응답이 없는 경우 (네트워크 에러 등)
+        throw new Error('알 수 없는 네트워크 오류가 발생했습니다.');
+      }
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+      throw new Error(`Request failed with status code ${error.response.status}`);
     }
-    throw new Error('알 수 없는 네트워크 오류가 발생했습니다.');
+    // AuthError 등 커스텀 에러는 그대로 다시 던집니다.
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error('알 수 없는 오류가 발생했습니다.');
   }
 }
 

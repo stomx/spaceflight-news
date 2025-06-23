@@ -24,6 +24,10 @@ describe('shared/config', () => {
       expect(() => validateEnvironment()).not.toThrow();
     });
 
+    it('should throw when url is not provided', () => {
+      expect(() => validateEnvironment('')).toThrow('API_URL이 설정되지 않았습니다.');
+    });
+
     it('should validate API_URL exists', () => {
       // Since API_URL has a fallback, it should always be defined
       expect(() => validateEnvironment()).not.toThrow();

@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useArticleQuery, useBlogQuery, useReportQuery } from '../useNewsQuery';
+import { useArticleQuery, useBlogQuery, useReportQuery, useNewsQuery } from '../useNewsQuery';
 
 // Mock the getNewsById functions
 vi.mock('@/shared/api/getNewsById', () => ({
@@ -235,6 +235,60 @@ describe('useReportQuery', () => {
     });
 
     expect(result.current.data).toEqual(mockReport);
+  });
+});
+
+describe('useNewsQuery', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("type이 'article'일 때 getArticleById를 호출해야 합니다", async () => {
+    const mockArticle = createMockArticle();
+    mockGetArticleById.mockResolvedValue(mockArticle);
+
+    const { result } = renderHook(() => useNewsQuery('article', 1), { wrapper: createWrapper() });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(mockGetArticleById).toHaveBeenCalledWith(1);
+    expect(mockGetBlogById).not.toHaveBeenCalled();
+    expect(mockGetReportById).not.toHaveBeenCalled();
+    expect(result.current.data).toEqual(mockArticle);
+  });
+
+  it("type이 'blog'일 때 getBlogById를 호출해야 합니다", async () => {
+    const mockBlog = createMockBlog();
+    mockGetBlogById.mockResolvedValue(mockBlog);
+
+    const { result } = renderHook(() => useNewsQuery('blog', 2), { wrapper: createWrapper() });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(mockGetBlogById).toHaveBeenCalledWith(2);
+    expect(mockGetArticleById).not.toHaveBeenCalled();
+    expect(mockGetReportById).not.toHaveBeenCalled();
+    expect(result.current.data).toEqual(mockBlog);
+  });
+
+  it("type이 'report'일 때 getReportById를 호출해야 합니다", async () => {
+    const mockReport = createMockReport();
+    mockGetReportById.mockResolvedValue(mockReport);
+
+    const { result } = renderHook(() => useNewsQuery('report', 3), { wrapper: createWrapper() });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(mockGetReportById).toHaveBeenCalledWith(3);
+    expect(mockGetArticleById).not.toHaveBeenCalled();
+    expect(mockGetBlogById).not.toHaveBeenCalled();
+    expect(result.current.data).toEqual(mockReport);
+  });
+
+  it('id가 없을 때 쿼리를 실행하지 않아야 합니다', () => {
+    const { result } = renderHook(() => useNewsQuery('article', ''), { wrapper: createWrapper() });
+    expect(result.current.isLoading).toBe(false);
+    expect(mockGetArticleById).not.toHaveBeenCalled();
   });
 });
 

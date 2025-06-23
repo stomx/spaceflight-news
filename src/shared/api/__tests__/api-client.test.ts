@@ -1,30 +1,25 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiClient } from '../api-client';
-
-// Mock axios module first
-vi.mock('axios', () => ({
-  default: {
-    create: () => ({
-      get: vi.fn(),
-      post: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn(),
-      interceptors: {
-        request: { use: vi.fn() },
-        response: { use: vi.fn() },
-      },
-    }),
-    isAxiosError: vi.fn(),
-  },
-}));
+import { http, HttpResponse } from 'msw';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { ApiClient, apiClient as singletonApiClient } from '../api-client';
+import { server } from '@/test/mocks/server';
+import { API_URL } from '@/shared/config';
 
 // localStorage 모킹
-const mockLocalStorage = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-};
+const mockLocalStorage = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => {
+      store[key] = value.toString();
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+  };
+})();
 
 Object.defineProperty(window, 'localStorage', {
   value: mockLocalStorage,
@@ -32,104 +27,152 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('ApiClient', () => {
-  let apiClientInstance: ApiClient;
+  let testClient: ApiClient;
 
   beforeEach(() => {
+    testClient = new ApiClient(API_URL);
+    mockLocalStorage.clear();
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
-    apiClientInstance = new ApiClient('https://api.test.com');
   });
 
-  describe('constructor', () => {
-    it('should create axios instance with correct configuration', () => {
-      expect(apiClientInstance).toBeInstanceOf(ApiClient);
+  describe('Request Interceptor', () => {
+    it('localStorage에 accessToken이 있으면 Authorization 헤더를 추가해야 합니다', async () => {
+      const token = 'test-token';
+      mockLocalStorage.setItem('accessToken', token);
+
+      server.use(
+        http.get(`${API_URL}/test-auth`, ({ request }) => {
+          return HttpResponse.json({ authHeader: request.headers.get('Authorization') });
+        }),
+      );
+
+      const response = await testClient.get<{ authHeader: string }>('/test-auth');
+      expect(response.authHeader).toBe(`Bearer ${token}`);
     });
 
-    it('should be ready for HTTP requests', () => {
-      // Test that the instance is properly initialized by checking if methods exist
-      expect(typeof apiClientInstance.get).toBe('function');
-      expect(typeof apiClientInstance.post).toBe('function');
-      expect(typeof apiClientInstance.put).toBe('function');
-      expect(typeof apiClientInstance.delete).toBe('function');
+    it('localStorage에 accessToken이 없으면 Authorization 헤더를 추가하지 않아야 합니다', async () => {
+      server.use(
+        http.get(`${API_URL}/test-no-auth`, ({ request }) => {
+          return HttpResponse.json({ authHeader: request.headers.get('Authorization') });
+        }),
+      );
+
+      const response = await testClient.get<{ authHeader: string }>('/test-no-auth');
+      expect(response.authHeader).toBeNull();
     });
   });
 
-  describe('HTTP methods', () => {
+  describe('Response Interceptor', () => {
+    it('401 응답을 받으면 localStorage의 accessToken을 제거하고 에러를 던져야 합니다', async () => {
+      mockLocalStorage.setItem('accessToken', 'test-token');
+      // 401 에러를 axios 에러 형태로 모킹합니다.
+      server.use(
+        http.get(`${API_URL}/unauthorized`, () => {
+          return new HttpResponse(JSON.stringify({ message: 'Unauthorized' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }),
+      );
+
+      await expect(testClient.get('/unauthorized')).rejects.toThrow('인증이 만료되었습니다. 다시 로그인해주세요.');
+      expect(mockLocalStorage.getItem('accessToken')).toBeNull();
+    });
+  });
+
+  describe('HTTP Methods', () => {
     const mockData = { id: 1, title: 'Test Article' };
+    const endpoint = '/articles';
 
-    describe('get', () => {
-      it('should make GET request successfully', async () => {
-        // Mock the axios instance created by ApiClient
-        const mockAxios = vi.mocked(await import('axios')).default;
-        const mockGet = vi.fn().mockResolvedValue({ data: mockData });
-        mockAxios.create = vi.fn().mockReturnValue({
-          get: mockGet,
-          post: vi.fn(),
-          put: vi.fn(),
-          delete: vi.fn(),
-          interceptors: {
-            request: { use: vi.fn() },
-            response: { use: vi.fn() },
-          },
-        });
-
-        // Create a new instance to use the mocked axios
-        const testClient = new ApiClient('https://api.test.com');
-        const result = await testClient.get('/articles');
-
-        expect(result).toEqual(mockData);
-      });
-
-      it('should handle GET request with params', async () => {
-        // Test behavior rather than implementation
-        const testClient = new ApiClient('https://api.test.com');
-
-        // We can't directly test the internal axios call without accessing private members
-        // Instead, we focus on testing that the method exists and handles basic scenarios
-        expect(typeof testClient.get).toBe('function');
-      });
+    it('GET 요청을 성공적으로 처리해야 합니다', async () => {
+      server.use(http.get(`${API_URL}${endpoint}`, () => HttpResponse.json([mockData])));
+      const result = await testClient.get<typeof mockData[]>(endpoint);
+      expect(result).toEqual([mockData]);
     });
 
-    describe('post', () => {
-      it('should make POST request successfully', async () => {
-        const testClient = new ApiClient('https://api.test.com');
-
-        // Test that the method exists and is callable
-        expect(typeof testClient.post).toBe('function');
-      });
+    it('POST 요청을 성공적으로 처리해야 합니다', async () => {
+      const newData = { title: 'New Article' };
+      server.use(
+        http.post(`${API_URL}${endpoint}`, async ({ request }) => {
+          const body = (await request.json()) as Record<string, unknown>;
+          return HttpResponse.json({ ...mockData, ...body });
+        }),
+      );
+      const result = await testClient.post(endpoint, newData);
+      expect(result).toEqual({ ...mockData, ...newData });
     });
 
-    describe('put', () => {
-      it('should make PUT request successfully', async () => {
-        const testClient = new ApiClient('https://api.test.com');
-
-        // Test that the method exists and is callable
-        expect(typeof testClient.put).toBe('function');
-      });
+    it('PUT 요청을 성공적으로 처리해야 합니다', async () => {
+      const updatedData = { title: 'Updated Article' };
+      const url = `${endpoint}/1`;
+      server.use(
+        http.put(`${API_URL}${url}`, async ({ request }) => {
+          const body = (await request.json()) as Record<string, unknown>;
+          return HttpResponse.json({ ...mockData, ...body });
+        }),
+      );
+      const result = await testClient.put(url, updatedData);
+      expect(result).toEqual({ ...mockData, ...updatedData });
     });
 
-    describe('delete', () => {
-      it('should make DELETE request successfully', async () => {
-        const testClient = new ApiClient('https://api.test.com');
+    it('DELETE 요청을 성공적으로 처리해야 합니다', async () => {
+      const url = `${endpoint}/1`;
+      server.use(http.delete(`${API_URL}${url}`, () => new HttpResponse(null, { status: 204 })));
+      const result = await testClient.delete(url);
+      expect(result).toBeUndefined();
+    });
 
-        // Test that the method exists and is callable
-        expect(typeof testClient.delete).toBe('function');
-      });
+    it('DELETE 요청이 데이터를 반환하는 경우 해당 데이터를 반환해야 합니다', async () => {
+      const url = `${endpoint}/2`;
+      const mockResponseData = { message: 'Deleted with response' };
+      server.use(http.delete(`${API_URL}${url}`, () => HttpResponse.json(mockResponseData)));
+      const result = await testClient.delete(url);
+      expect(result).toEqual(mockResponseData);
     });
   });
 
-  describe('error handling', () => {
-    it('should have proper error handling methods', () => {
-      // Test that the instance can handle errors properly
-      // We focus on testing the public interface rather than internal implementation
-      expect(apiClientInstance).toBeInstanceOf(ApiClient);
-      expect(typeof apiClientInstance.get).toBe('function');
+  describe('Error Handling', () => {
+    it('axios 에러가 발생하면 커스텀 메시지를 포함한 에러를 던져야 합니다', async () => {
+      const errorMessage = 'Not Found';
+      server.use(
+        http.get(`${API_URL}/not-found`, () => {
+          return HttpResponse.json({ message: errorMessage }, { status: 404 });
+        }),
+      );
+      await expect(testClient.get('/not-found')).rejects.toThrow(errorMessage);
+    });
+
+    it('네트워크 에러가 발생하면 "알 수 없는 네트워크 오류" 메시지를 던져야 합니다', async () => {
+      server.use(http.get(`${API_URL}/network-error`, () => HttpResponse.error()));
+      await expect(testClient.get('/network-error')).rejects.toThrow('알 수 없는 네트워크 오류가 발생했습니다.');
+    });
+
+    it('axios 에러에 메시지가 없는 경우 상태 코드를 포함한 에러를 던져야 합니다', async () => {
+      server.use(http.get(`${API_URL}/no-message`, () => new HttpResponse(null, { status: 500 })));
+      await expect(testClient.get('/no-message')).rejects.toThrow('Request failed with status code 500');
+    });
+
+    it('일반 Error 객체를 그대로 다시 던져야 합니다', async () => {
+      const customError = new Error('Custom Error');
+      // @ts-expect-error - private 멤버 테스트를 위해 의도적으로 접근
+      vi.spyOn(testClient.instance, 'get').mockRejectedValue(customError);
+      await expect(testClient.get('/custom-error')).rejects.toThrow('Custom Error');
+    });
+
+    it('알 수 없는 타입의 에러가 발생하면 "알 수 없는 오류" 메시지를 던져야 합니다', async () => {
+      const unknownError = { an: 'object' };
+      // @ts-expect-error - private 멤버 테스트를 위해 의도적으로 접근
+      vi.spyOn(testClient.instance, 'get').mockRejectedValue(unknownError);
+      await expect(testClient.get('/unknown-error')).rejects.toThrow('알 수 없는 오류가 발생했습니다.');
     });
   });
 
-  describe('exported instance', () => {
-    it('should export a default apiClient instance', async () => {
-      const { apiClient } = await import('../api-client');
-      expect(apiClient).toBeInstanceOf(ApiClient);
+  describe('Singleton Instance', () => {
+    it('export된 apiClient 인스턴스는 ApiClient의 인스턴스여야 합니다', () => {
+      expect(singletonApiClient).toBeInstanceOf(ApiClient);
     });
   });
 });
