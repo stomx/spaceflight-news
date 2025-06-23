@@ -63,6 +63,21 @@ describe('ApiClient', () => {
       const response = await testClient.get<{ authHeader: string }>('/test-no-auth');
       expect(response.authHeader).toBeNull();
     });
+
+    it('request config에 headers가 없는 경우에도 Authorization 헤더를 올바르게 추가해야 합니다', async () => {
+      const token = 'test-token-no-headers';
+      mockLocalStorage.setItem('accessToken', token);
+
+      // 인터셉터의 fulfilled 핸들러를 직접 테스트
+      // @ts-expect-error - private 멤버 테스트를 위해 의도적으로 접근
+      const interceptor = testClient.instance.interceptors.request.handlers[0].fulfilled;
+      const config = { headers: undefined };
+
+      const newConfig = await interceptor(config);
+
+      expect(newConfig.headers).toBeDefined();
+      expect(newConfig.headers.Authorization).toBe(`Bearer ${token}`);
+    });
   });
 
   describe('Response Interceptor', () => {
@@ -148,6 +163,42 @@ describe('ApiClient', () => {
     it('네트워크 에러가 발생하면 "알 수 없는 네트워크 오류" 메시지를 던져야 합니다', async () => {
       server.use(http.get(`${API_URL}/network-error`, () => HttpResponse.error()));
       await expect(testClient.get('/network-error')).rejects.toThrow('알 수 없는 네트워크 오류가 발생했습니다.');
+    });
+
+    it('POST 요청 실패 시 에러를 던져야 합니다', async () => {
+      const endpoint = '/articles';
+      const errorMessage = 'Internal Server Error';
+      server.use(
+        http.post(
+          `${API_URL}${endpoint}`,
+          () => new HttpResponse(JSON.stringify({ message: errorMessage }), { status: 500 }),
+        ),
+      );
+      await expect(testClient.post(endpoint, {})).rejects.toThrow(errorMessage);
+    });
+
+    it('PUT 요청 실패 시 에러를 던져야 합니다', async () => {
+      const endpoint = '/articles/1';
+      const errorMessage = 'Update Failed';
+      server.use(
+        http.put(
+          `${API_URL}${endpoint}`,
+          () => new HttpResponse(JSON.stringify({ message: errorMessage }), { status: 400 }),
+        ),
+      );
+      await expect(testClient.put(endpoint, {})).rejects.toThrow(errorMessage);
+    });
+
+    it('DELETE 요청 실패 시 에러를 던져야 합니다', async () => {
+      const endpoint = '/articles/1';
+      const errorMessage = 'Deletion Failed';
+      server.use(
+        http.delete(
+          `${API_URL}${endpoint}`,
+          () => new HttpResponse(JSON.stringify({ message: errorMessage }), { status: 503 }),
+        ),
+      );
+      await expect(testClient.delete(endpoint)).rejects.toThrow(errorMessage);
     });
 
     it('axios 에러에 메시지가 없는 경우 상태 코드를 포함한 에러를 던져야 합니다', async () => {

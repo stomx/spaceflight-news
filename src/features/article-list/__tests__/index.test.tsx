@@ -122,25 +122,26 @@ describe('ArticleListFeature', () => {
       expect(screen.getByText('네트워크 오류가 발생했습니다')).toBeInTheDocument();
     });
 
-    it('에러 객체가 없을 때 기본 메시지를 표시한다', () => {
+    it('에러 객체에 메시지가 없으면 기본 에러 메시지를 표시한다', () => {
       mockUseNewsListModel.mockReturnValue({
-        data: undefined,
+        data: null,
         isLoading: false,
         isError: true,
-        error: new Error('Unknown error'),
-        isPending: false,
+        error: new Error(), // No message
         isSuccess: false,
-        status: 'error' as const,
+        status: 'error',
         page: 1,
         limit: 10,
         totalPages: 0,
-        search: {},
         offset: 0,
-      } as any);
+        search: {},
+        refetch: vi.fn(),
+      });
 
       render(<ArticleListFeature />);
 
       expect(screen.getByText('기사를 불러올 수 없습니다')).toBeInTheDocument();
+      expect(screen.getByText('네트워크를 확인하고 다시 시도해주세요.')).toBeInTheDocument();
     });
   });
 

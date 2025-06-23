@@ -55,22 +55,26 @@ export interface Report {
   summary: string;
   published_at: string;
   updated_at: string;
+  featured: boolean;
+  launches: LaunchInfo[];
+  events: EventInfo[];
   type?: 'report';
 }
 
-export interface PaginatedResponse<T> {
+export interface Paginated<T> {
   count: number;
   next: string | null;
   previous: string | null;
   results: T[];
 }
 
-export type PaginatedArticleList = PaginatedResponse<Article>;
-export type PaginatedBlogList = PaginatedResponse<Blog>;
-export type PaginatedReportList = PaginatedResponse<Report>;
+export type PaginatedArticleList = Paginated<Article>;
+export type PaginatedBlogList = Paginated<Blog>;
+export type PaginatedReportList = Paginated<Report>;
 
 // 검색 파라미터 타입 정의
-export interface SearchParams {
+export interface NewsListSearch {
   page?: number;
   limit?: number;
+  category?: string;
 }

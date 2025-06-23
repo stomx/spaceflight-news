@@ -1,60 +1,46 @@
 import { Button } from '@/shared/components/button';
-import { motion } from 'framer-motion';
-import { memo } from 'react';
+import type { ReactNode } from 'react';
 
-interface NewsListProps<T> {
+export interface NewsListProps<T> {
   items: T[];
-  renderItem: (item: T) => React.ReactNode;
-  emptyText?: string;
+  renderItem: (item: T) => ReactNode;
+  emptyText: string;
   page?: number;
   totalPages?: number;
   onPageChange?: (page: number) => void;
 }
 
-function NewsListComponent<T>({
+export function NewsList<T>({
   items,
   renderItem,
-  emptyText = '표시할 항목이 없습니다.',
+  emptyText,
   page,
   totalPages,
   onPageChange,
 }: NewsListProps<T>) {
-  if (!items.length) {
+  if (items.length === 0) {
     return (
-      <div className="py-12 px-4 text-muted-foreground text-center">
-        <div className="text-lg font-medium mb-2">📰</div>
-        <div>{emptyText}</div>
+      <div className="flex items-center justify-center h-40 text-muted-foreground" data-testid="empty-list">
+        {emptyText}
       </div>
     );
   }
 
+  const handlePageChange = (newPage: number) => {
+    if (onPageChange) {
+      onPageChange(newPage);
+    }
+  };
+
   return (
-    <motion.div
-      className="px-4 md:px-0"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
-      <motion.section
-        className="flex flex-col gap-3 md:gap-4 mx-auto w-full max-w-3xl"
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: { opacity: 0 },
-          visible: {
-            opacity: 1,
-            transition: {
-              staggerChildren: 0.1,
-            },
-          },
-        }}
-      >
+    <div className="px-4 md:px-0">
+      <section className="flex flex-col gap-3 md:gap-4 mx-auto w-full max-w-3xl">
         {items.map(renderItem)}
-      </motion.section>
+      </section>
       {page && totalPages && onPageChange && (
         <div className="flex justify-center items-center gap-3 mt-8 px-4">
           <Button
-            onClick={() => onPageChange(page - 1)}
+            onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
             variant="outline"
             size="sm"
@@ -66,7 +52,7 @@ function NewsListComponent<T>({
             {page} / {totalPages || 1}
           </span>
           <Button
-            onClick={() => onPageChange(page + 1)}
+            onClick={() => handlePageChange(page + 1)}
             disabled={page === totalPages || totalPages === 0}
             variant="outline"
             size="sm"
@@ -76,9 +62,6 @@ function NewsListComponent<T>({
           </Button>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
-
-// 제네릭 컴포넌트의 메모화를 위한 타입 캐스팅
-export const NewsList = memo(NewsListComponent) as typeof NewsListComponent;

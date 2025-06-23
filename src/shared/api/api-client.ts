@@ -1,5 +1,5 @@
 import { API_URL } from '@/shared/config';
-import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, AxiosHeaders } from 'axios';
 
 /**
  * axios 기반의 공통 API 클라이언트 클래스입니다.
@@ -25,7 +25,9 @@ export class ApiClient {
         // SSR 환경에서 localStorage가 없을 수 있으므로 안전하게 접근
         const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
         if (token) {
-          config.headers = config.headers || {};
+          if (!config.headers) {
+            config.headers = new AxiosHeaders();
+          }
           config.headers.Authorization = `Bearer ${token}`;
         }
         return config;

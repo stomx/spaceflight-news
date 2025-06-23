@@ -1,69 +1,85 @@
-import { Badge } from '@/shared/components/badge';
-import { Card } from '@/shared/components/card';
+import { Button } from '@/shared/components/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/components/card';
 import { LazyImage } from '@/shared/components/lazy-image';
 import { motion } from 'framer-motion';
-import { memo } from 'react';
+import type { ReactNode } from 'react';
+import { Badge } from '@/shared/components/badge';
 
-interface NewsCardProps {
+export interface NewsCardProps {
   imageUrl: string;
   title: string;
   summary: string;
   date: string;
   site: string;
+  url?: string;
   featured?: boolean;
-  children?: React.ReactNode;
   onClick?: () => void;
+  children?: ReactNode;
 }
 
-export const NewsCard = memo(function NewsCard({
+export function NewsCard({
   imageUrl,
   title,
   summary,
   date,
   site,
-  featured,
-  children,
+  url,
+  featured = false,
   onClick,
+  children,
 }: NewsCardProps) {
+  const cardContent = (
+    <Card
+      className={`h-full flex flex-col transition-all duration-300 ease-in-out ${
+        onClick ? 'cursor-pointer hover:shadow-lg hover:border-primary/50' : ''
+      } ${featured ? 'border-2 border-primary/80 shadow-lg' : ''}`}
+      onClick={onClick}
+      data-testid="news-card-component"
+    >
+      <CardHeader className="p-0 relative">
+        <LazyImage
+          src={imageUrl}
+          alt={title}
+          className="w-full h-48 object-cover rounded-t-lg"
+          loading="lazy"
+        />
+        {featured && (
+          <Badge variant="destructive" className="absolute top-2 right-2">
+            특집
+          </Badge>
+        )}
+      </CardHeader>
+      <CardContent className="flex-grow p-4">
+        <CardTitle className="text-lg font-bold mb-2 line-clamp-2">{title}</CardTitle>
+        <p className="text-sm text-muted-foreground line-clamp-3">{summary}</p>
+      </CardContent>
+      <CardFooter className="flex justify-between items-center p-4 pt-0">
+        <div className="text-xs text-muted-foreground">
+          <span>{site}</span> | <span>{date}</span>
+        </div>
+        {children ?? (
+          <Button asChild variant="outline" size="sm">
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              더 보기
+            </a>
+          </Button>
+        )}
+      </CardFooter>
+    </Card>
+  );
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      variants={{
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+          y: 0,
+          opacity: 1,
+        },
+      }}
+      className="h-full"
     >
-      <Card
-        className={`w-full hover:shadow-md transition-shadow duration-200 ${onClick ? 'cursor-pointer' : ''}`}
-        onClick={onClick}
-      >
-        <div className="flex md:flex-row flex-col gap-3 md:gap-4">
-          <figure className="rounded-md w-full md:w-1/2 h-48 md:h-auto aspect-none md:aspect-video flex-shrink-0">
-            <LazyImage src={imageUrl} alt={title} className="rounded-md w-full h-full object-cover" />
-          </figure>
-          <div className="flex flex-col flex-1 gap-2 py-3 md:py-6 px-4 md:px-0 min-h-0">
-            <div className="flex items-start gap-2">
-              <h2 className="flex-1 font-bold text-base md:text-lg line-clamp-2 leading-tight min-h-[2.5rem]">
-                {title}
-              </h2>
-              {featured && (
-                <Badge variant="destructive" className="shrink-0 text-xs">
-                  특집
-                </Badge>
-              )}
-            </div>
-            <p className="text-muted-foreground text-sm line-clamp-3 md:line-clamp-4 leading-relaxed flex-1 min-h-[4.5rem] md:min-h-[6rem]">
-              {summary}
-            </p>
-            <div className="flex items-center gap-2 text-gray-500 text-xs mt-auto">
-              <span className="truncate">{date}</span>
-              <span className="shrink-0">·</span>
-              <span className="truncate">{site}</span>
-            </div>
-            {children && <div className="mt-3">{children}</div>}
-          </div>
-        </div>
-      </Card>
+      {cardContent}
     </motion.div>
   );
-});
+}
