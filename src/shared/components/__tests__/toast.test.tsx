@@ -1,5 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, renderHook, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type React from "react";
 import { describe, it, expect } from 'vitest';
 import { ToastProvider, useToast } from '../toast';
 
@@ -81,5 +82,61 @@ describe('Toast Component', () => {
        expect(screen.queryByText('성공')).not.toBeInTheDocument();
        expect(screen.queryByText('에러')).not.toBeInTheDocument();
     });
+  });
+});
+describe('Toast 추가 동작', () => {
+  it('사용 환경 외부에서 useToast 호출 시 에러를 발생시킨다', () => {
+    const Test = () => {
+      useToast();
+      return null;
+    };
+    expect(() => render(<Test />)).toThrow('useToast must be used within a ToastProvider');
+  });
+
+  it('지정된 시간 후 토스트가 자동으로 사라진다', () => {
+    vi.useFakeTimers();
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <ToastProvider>{children}</ToastProvider>
+    );
+    const { result } = renderHook(() => useToast(), { wrapper });
+    act(() => {
+      result.current.addToast({ type: 'success', message: 'bye' });
+    });
+    expect(result.current.toasts).toHaveLength(1);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(result.current.toasts).toHaveLength(0);
+    vi.useRealTimers();
+  });
+
+  it('persistent 옵션을 사용하면 자동으로 사라지지 않는다', () => {
+    vi.useFakeTimers();
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <ToastProvider>{children}</ToastProvider>
+    );
+    const { result } = renderHook(() => useToast(), { wrapper });
+    act(() => {
+      result.current.addToast({ type: 'success', message: 'keep', persistent: true, duration: 10 });
+    });
+    expect(result.current.toasts).toHaveLength(1);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(result.current.toasts).toHaveLength(1);
+    vi.useRealTimers();
+  });
+
+  it('clearAllToasts 호출 시 모든 토스트가 제거된다', () => {
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <ToastProvider>{children}</ToastProvider>
+    );
+    const { result } = renderHook(() => useToast(), { wrapper });
+    act(() => {
+      result.current.addToast({ type: 'success', message: 'a', persistent: true });
+      result.current.addToast({ type: 'error', message: 'b', persistent: true });
+      result.current.clearAllToasts();
+    });
+    expect(result.current.toasts).toHaveLength(0);
   });
 });

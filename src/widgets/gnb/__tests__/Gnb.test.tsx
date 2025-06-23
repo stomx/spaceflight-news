@@ -212,4 +212,26 @@ describe('Gnb Component', () => {
       expect(screen.queryByText('보고서 목록으로 돌아가기')).not.toBeInTheDocument();
     });
   });
+  describe("기본 검색 파라미터 처리", () => {
+    it("검색 파라미터가 없으면 기본값을 사용한다", async () => {
+      const user = userEvent.setup();
+      mockUseSearch.mockReturnValue({});
+      mockMatchRoute.mockImplementation((o: { to: string }) => o.to === "/articles/$articleId");
+      render(<Gnb />);
+      const backButton = screen.getByText("기사 목록으로 돌아가기");
+      await user.click(backButton);
+      expect(mockNavigate).toHaveBeenCalledWith({ to: "/articles", search: { page: 1, limit: 10 } });
+    });
+
+    it("숫자가 아닌 파라미터는 기본값으로 대체한다", async () => {
+      const user = userEvent.setup();
+      mockUseSearch.mockReturnValue({ page: "foo", limit: 0 });
+      mockMatchRoute.mockImplementation((o: { to: string }) => o.to === "/blogs/$blogId");
+      render(<Gnb />);
+      const backButton = screen.getByText("블로그 목록으로 돌아가기");
+      await user.click(backButton);
+      expect(mockNavigate).toHaveBeenCalledWith({ to: "/blogs", search: { page: 1, limit: 10 } });
+    });
+  });
+
 });

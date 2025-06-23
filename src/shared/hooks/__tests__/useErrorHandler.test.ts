@@ -112,4 +112,13 @@ describe('useErrorHandler', () => {
     consoleSpy.mockRestore();
     process.env.NODE_ENV = originalEnv;
   });
+
+  it("withErrorHandling이 문자열 에러도 처리한다", async () => {
+    const { result } = renderHook(() => useErrorHandler());
+    const failingFn = vi.fn().mockRejectedValue("문자열 에러");
+    const wrappedFn = result.current.withErrorHandling(failingFn);
+    const returnValue = await act(async () => await wrappedFn());
+    expect(returnValue).toBeNull();
+    expect(result.current.error?.message).toBe("문자열 에러");
+  });
 });

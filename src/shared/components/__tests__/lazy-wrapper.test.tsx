@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { Suspense } from 'react';
 import { ErrorBoundary } from '../error-boundary';
-import { createLazyComponent, LoadingSkeleton, CardSkeleton } from '../lazy-wrapper';
+import { createLazyComponent, LoadingSkeleton, CardSkeleton, LazyWrapper } from '../lazy-wrapper';
 
 // 테스트용 컴포넌트들
 const TestComponent = ({ message = 'Test Component' }: { message?: string }) => (
@@ -286,5 +286,15 @@ describe('통합 사용 시나리오', () => {
         expect(screen.getByText('변경됨')).toBeInTheDocument();
       });
     });
+  });
+});
+describe('LazyWrapper Component', () => {
+  it('children을 렌더링한다', () => {
+    render(
+      <LazyWrapper fallback={<div data-testid="fallback">fallback</div>}>
+        <div data-testid="content">hello</div>
+      </LazyWrapper>,
+    );
+    expect(screen.getByTestId('content')).toBeInTheDocument();
   });
 });
