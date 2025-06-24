@@ -1,5 +1,6 @@
 import { render, screen } from '@/test/test-utils';
-import { describe, expect, it } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 import { NewsCard } from '../NewsCard';
 
 describe('NewsCard', () => {
@@ -43,5 +44,14 @@ describe('NewsCard', () => {
       </NewsCard>,
     );
     expect(screen.getByText('테스트 버튼')).toBeInTheDocument();
+  });
+
+  it('onClick 핸들러가 호출되어야 한다', async () => {
+    const handleClick = vi.fn();
+    const user = userEvent.setup();
+    render(<NewsCard {...mockProps} onClick={handleClick} />);
+
+    await user.click(screen.getByTestId('news-card-component'));
+    expect(handleClick).toHaveBeenCalled();
   });
 });

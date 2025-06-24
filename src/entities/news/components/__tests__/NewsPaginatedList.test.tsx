@@ -1,8 +1,9 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { NewsPaginatedList } from '../NewsPaginatedList';
 import type { Article } from '@/shared/types/news';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { fireEvent, render, screen } from '@testing-library/react';
+import type { ButtonHTMLAttributes } from 'react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { NewsPaginatedList } from '../NewsPaginatedList';
 
 // Mock TanStack Router hooks
 const mockNavigate = vi.fn();
@@ -15,7 +16,13 @@ vi.mock('@tanstack/react-router', () => ({
 
 // Mock Button component
 vi.mock('@/shared/components/button', () => ({
-  Button: ({ children, onClick, disabled, variant, ...props }: any) => (
+  Button: ({
+    children,
+    onClick,
+    disabled,
+    variant,
+    ...props
+  }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: string }) => (
     <button
       onClick={onClick}
       disabled={disabled}
@@ -38,9 +45,7 @@ const MockListComponent = ({ items }: { items: Article[] }) => (
   </div>
 );
 
-const MockSkeletonComponent = () => (
-  <div data-testid="skeleton">Loading...</div>
-);
+const MockSkeletonComponent = () => <div data-testid="skeleton">Loading...</div>;
 
 // Mock data
 const mockArticles: Article[] = [
@@ -89,11 +94,7 @@ describe('NewsPaginatedList Component', () => {
   });
 
   const renderWithProviders = (component: React.ReactElement) => {
-    return render(
-      <QueryClientProvider client={queryClient}>
-        {component}
-      </QueryClientProvider>
-    );
+    return render(<QueryClientProvider client={queryClient}>{component}</QueryClientProvider>);
   };
 
   describe('로딩 상태', () => {
@@ -112,7 +113,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       expect(screen.getByTestId('skeleton')).toBeInTheDocument();
@@ -136,7 +137,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       expect(screen.getByText('에러 발생: 테스트 에러')).toBeInTheDocument();
@@ -157,7 +158,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       expect(screen.getByText('에러 발생:')).toBeInTheDocument();
@@ -180,7 +181,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       expect(screen.getByText('데이터가 없습니다.')).toBeInTheDocument();
@@ -206,7 +207,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       expect(screen.getByTestId('news-list')).toBeInTheDocument();
@@ -232,7 +233,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       expect(screen.getByRole('button', { name: '이전' })).toBeInTheDocument();
@@ -260,7 +261,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       const prevButton = screen.getByRole('button', { name: '이전' });
@@ -285,7 +286,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       const nextButton = screen.getByRole('button', { name: '다음' });
@@ -310,7 +311,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       const nextButton = screen.getByRole('button', { name: '다음' });
@@ -338,7 +339,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       expect(mockUseQuery).toHaveBeenCalledWith({
@@ -367,7 +368,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       expect(mockUseQuery).toHaveBeenCalledWith({
@@ -396,12 +397,12 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       expect(mockUseQuery).toHaveBeenCalledWith({
         limit: 10, // default limit
-        offset: 0,  // page 1, offset = 0
+        offset: 0, // page 1, offset = 0
       });
     });
 
@@ -424,7 +425,7 @@ describe('NewsPaginatedList Component', () => {
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
           defaultLimit={20}
-        />
+        />,
       );
 
       expect(mockUseQuery).toHaveBeenCalledWith({
@@ -455,7 +456,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       const nextButton = screen.getByRole('button', { name: '다음' });
@@ -484,7 +485,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       const prevButton = screen.getByRole('button', { name: '이전' });
@@ -498,7 +499,7 @@ describe('NewsPaginatedList Component', () => {
     it('기존 search 파라미터를 유지한다', async () => {
       mockUseSearch.mockReturnValue({
         query: 'test',
-        category: 'news'
+        category: 'news',
       });
 
       const mockUseQuery = vi.fn().mockReturnValue({
@@ -516,7 +517,7 @@ describe('NewsPaginatedList Component', () => {
           useQuery={mockUseQuery}
           ListComponent={MockListComponent}
           SkeletonComponent={MockSkeletonComponent}
-        />
+        />,
       );
 
       const nextButton = screen.getByRole('button', { name: '다음' });
@@ -527,7 +528,7 @@ describe('NewsPaginatedList Component', () => {
           query: 'test',
           category: 'news',
           page: 2,
-          limit: 10
+          limit: 10,
         },
       });
     });

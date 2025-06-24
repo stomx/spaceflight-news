@@ -18,6 +18,7 @@ export function NewsList<T>({
   totalPages,
   onPageChange,
 }: NewsListProps<T>) {
+  const total = totalPages ?? 1;
   if (items.length === 0) {
     return (
       <div className="flex items-center justify-center h-40 text-muted-foreground" data-testid="empty-list">
@@ -49,7 +50,7 @@ export function NewsList<T>({
             이전
           </Button>
           <span className="text-muted-foreground text-sm font-medium px-2">
-            {page} / {totalPages || 1}
+            {page} / {total}
           </span>
           <Button
             onClick={() => handlePageChange(page + 1)}

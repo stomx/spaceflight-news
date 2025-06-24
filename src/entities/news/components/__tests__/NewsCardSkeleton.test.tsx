@@ -3,9 +3,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { NewsCardSkeleton, NewsListSkeleton } from '../NewsCardSkeleton';
 
 // Mock framer-motion
+import type { ComponentPropsWithoutRef } from 'react';
+
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: ComponentPropsWithoutRef<'div'>) => <div {...props}>{children}</div>,
   },
 }));
 

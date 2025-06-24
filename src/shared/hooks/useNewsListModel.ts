@@ -1,9 +1,9 @@
+import { getPaginatedList } from '@/shared/api/getPaginatedList';
+import { DEFAULT_LIMIT } from '@/shared/config';
+import type { NewsListSearch, Paginated } from '@/shared/types/news';
 import { useQuery } from '@tanstack/react-query';
 import { useSearch } from '@tanstack/react-router';
 import { useMemo } from 'react';
-import { getPaginatedList } from '@/shared/api/getPaginatedList';
-import type { Paginated, NewsListSearch } from '@/shared/types/news';
-import { DEFAULT_LIMIT } from '@/shared/config';
 
 /**
  * 뉴스/블로그 등 모든 도메인에서 사용 가능한 제네릭 리스트 모델 훅
@@ -24,9 +24,7 @@ export type UseNewsListModelReturn<T> = {
   status: 'pending' | 'error' | 'success';
 };
 
-export function useNewsListModel<T>(
-  resource: 'articles' | 'blogs' | 'reports',
-): UseNewsListModelReturn<T> {
+export function useNewsListModel<T>(resource: 'articles' | 'blogs' | 'reports'): UseNewsListModelReturn<T> {
   const search: NewsListSearch = useSearch({ from: `/${resource}` });
   const page = Number.parseInt(String(search.page), 10) || 1;
   const limit = Number.parseInt(String(search.limit), 10) || DEFAULT_LIMIT;
@@ -43,7 +41,7 @@ export function useNewsListModel<T>(
     return queryResult.data ? Math.ceil(queryResult.data.count / limit) : 0;
   }, [queryResult.data, limit]);
 
-  return {
+  const model: UseNewsListModelReturn<T> = {
     ...queryResult,
     data: queryResult.data ?? null,
     page,
@@ -54,5 +52,7 @@ export function useNewsListModel<T>(
     refetch: queryResult.refetch,
     isSuccess: queryResult.isSuccess,
     status: queryResult.status,
-  } as unknown as UseNewsListModelReturn<T>;
+  };
+
+  return model;
 }

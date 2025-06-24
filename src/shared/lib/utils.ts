@@ -14,10 +14,10 @@ export function cn(...inputs: ClassValue[]) {
  * @returns 기본값이 아닌 파라미터만 포함된 객체
  */
 export function cleanSearchParams(
-  search: Record<string, unknown>,
+  search: Record<string, string | number | boolean | null | undefined>,
   page: number,
   limit: number,
-): Record<string, unknown> {
+): Record<string, string | number | boolean | null | undefined> {
   const cleanedParams = { ...search };
 
   // page가 기본값(1)이면 제거
