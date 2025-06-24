@@ -125,6 +125,20 @@ describe('ErrorBoundary Component', () => {
     });
   });
 
+  describe('onError 콜백', () => {
+    it('에러 발생 시 onError가 호출된다', () => {
+      const onErrorSpy = vi.fn();
+
+      render(
+        <ErrorBoundary onError={onErrorSpy}>
+          <ThrowError />
+        </ErrorBoundary>,
+      );
+
+      expect(onErrorSpy).toHaveBeenCalled();
+    });
+  });
+
   describe('다중 에러', () => {
     it('연속된 에러를 올바르게 처리한다', () => {
       const { rerender } = render(

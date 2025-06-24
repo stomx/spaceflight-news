@@ -78,6 +78,24 @@ describe('ApiClient', () => {
       expect(newConfig.headers).toBeDefined();
       expect(newConfig.headers.Authorization).toBe(`Bearer ${token}`);
     });
+
+    it('SSR 환경에서는 window가 없어도 오류 없이 동작한다', async () => {
+      // window 제거
+      const globalWithWindow = globalThis as { window?: Window };
+      const originalWindow = globalWithWindow.window;
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete globalWithWindow.window;
+
+      // @ts-expect-error - private 멤버 테스트를 위해 의도적으로 접근
+      const interceptor = testClient.instance.interceptors.request.handlers[0].fulfilled;
+      const config = { headers: undefined };
+
+      const newConfig = await interceptor(config);
+
+      expect(newConfig.headers?.Authorization).toBeUndefined();
+
+      globalWithWindow.window = originalWindow;
+    });
   });
 
   describe('Response Interceptor', () => {
@@ -112,7 +130,7 @@ describe('ApiClient', () => {
       const newData = { title: 'New Article' };
       server.use(
         http.post(`${API_URL}${endpoint}`, async ({ request }) => {
-          const body = (await request.json()) as Record<string, unknown>;
+          const body = (await request.json()) as typeof newData;
           return HttpResponse.json({ ...mockData, ...body });
         }),
       );
@@ -125,7 +143,7 @@ describe('ApiClient', () => {
       const url = `${endpoint}/1`;
       server.use(
         http.put(`${API_URL}${url}`, async ({ request }) => {
-          const body = (await request.json()) as Record<string, unknown>;
+          const body = (await request.json()) as typeof updatedData;
           return HttpResponse.json({ ...mockData, ...body });
         }),
       );
@@ -146,6 +164,15 @@ describe('ApiClient', () => {
       server.use(http.delete(`${API_URL}${url}`, () => HttpResponse.json(mockResponseData)));
       const result = await testClient.delete(url);
       expect(result).toEqual(mockResponseData);
+    });
+
+    it('DELETE 요청이 빈 문자열을 반환하면 undefined를 반환해야 합니다', async () => {
+      const url = `${endpoint}/3`;
+      server.use(
+        http.delete(`${API_URL}${url}`, () => new HttpResponse('', { status: 200 })),
+      );
+      const result = await testClient.delete(url);
+      expect(result).toBeUndefined();
     });
   });
 

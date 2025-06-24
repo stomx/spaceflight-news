@@ -10,7 +10,7 @@ export function LazyWrapper({ fallback = <div>Loading...</div>, children }: Lazy
 }
 
 // 동적 임포트 헬퍼 함수
-export function createLazyComponent<P extends Record<string, unknown> = Record<string, unknown>>(
+export function createLazyComponent<P extends object = Record<string, never>>(
   importFn: () => Promise<{ default: ComponentType<P> }>,
   fallback?: React.ReactNode,
 ) {

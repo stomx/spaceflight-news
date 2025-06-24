@@ -59,7 +59,7 @@ export class ApiClient {
   /**
    * GET 요청
    */
-  public async get<T = unknown>(
+  public async get<T = void>(
     url: string,
     params?: Record<string, string | number>,
     config?: AxiosRequestConfig,
@@ -78,7 +78,7 @@ export class ApiClient {
   /**
    * POST 요청
    */
-  public async post<T = unknown, D = Record<string, unknown>>(
+  public async post<T = void, D = Record<string, never>>(
     url: string,
     data?: D,
     config?: AxiosRequestConfig,
@@ -94,7 +94,7 @@ export class ApiClient {
   /**
    * PUT 요청
    */
-  public async put<T = unknown, D = Record<string, unknown>>(
+  public async put<T = void, D = Record<string, never>>(
     url: string,
     data?: D,
     config?: AxiosRequestConfig,
@@ -110,7 +110,7 @@ export class ApiClient {
   /**
    * DELETE 요청
    */
-  public async delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T | undefined> {
+  public async delete<T = void>(url: string, config?: AxiosRequestConfig): Promise<T | undefined> {
     try {
       const response: AxiosResponse<T> = await this.instance.delete(url, config);
       return response.data === '' ? undefined : response.data;

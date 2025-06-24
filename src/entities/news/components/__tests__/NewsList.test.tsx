@@ -112,4 +112,50 @@ describe('NewsList', () => {
     );
     expect(screen.getByRole('button', { name: '다음' })).toBeDisabled();
   });
+
+  it('onPageChange가 없으면 페이지네이션이 렌더링되지 않는다', () => {
+    render(
+      <NewsList
+        items={mockItems}
+        renderItem={mockRenderItem}
+        page={1}
+        totalPages={5}
+        emptyText="표시할 항목이 없습니다."
+      />,
+    );
+
+    expect(screen.queryByText('1 / 5')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '이전' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '다음' })).not.toBeInTheDocument();
+  });
+
+  it('page 값이 없으면 페이지네이션이 렌더링되지 않는다', () => {
+    render(
+      <NewsList
+        items={mockItems}
+        renderItem={mockRenderItem}
+        totalPages={5}
+        onPageChange={vi.fn()}
+        emptyText="표시할 항목이 없습니다."
+      />,
+    );
+
+    expect(screen.queryByRole('button', { name: '이전' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '다음' })).not.toBeInTheDocument();
+  });
+
+  it('totalPages 값이 없으면 페이지네이션이 렌더링되지 않는다', () => {
+    render(
+      <NewsList
+        items={mockItems}
+        renderItem={mockRenderItem}
+        page={1}
+        onPageChange={vi.fn()}
+        emptyText="표시할 항목이 없습니다."
+      />,
+    );
+
+    expect(screen.queryByRole('button', { name: '이전' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '다음' })).not.toBeInTheDocument();
+  });
 });
